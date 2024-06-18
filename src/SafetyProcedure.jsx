@@ -7,17 +7,17 @@ const airlines = [
   {
     name: "Philippine Airlines",
     image: "src/assets/PHair.jpg",
-    link: "https://www.philippineairlines.com/covid-information-hub/safety-measures",
+    link: "/",
   },
   {
     name: "Cebu Pacific",
     image: "src/assets/CebuPacific.png",
-    link: "https://www.cebupacificair.com/en-PH/pages/travel-info/covid-travel-reminders/contactless-flight-guidelines",
+    link: "/",
   },
   {
     name: "AirAsia",
     image: "src/assets/Air.png",
-    link: "https://www.airasia.com/aa/covid-19/en/gb/flying-safe-with-airasia.html",
+    link: "/",
   },
 ];
 
