@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "./config/firebase"; // Adjust the path based on your directory structure
 import logo from "./assets/mainlogo.png"; // Adjust the path as necessary
 
@@ -12,6 +15,7 @@ const LoginForm = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [resetEmailSent, setResetEmailSent] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +55,20 @@ const LoginForm = () => {
     }
   };
 
+  const handlePasswordReset = async () => {
+    if (!email) {
+      setError("Please enter your email address first.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetEmailSent(true);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
       <div className="text-center">
@@ -60,6 +78,9 @@ const LoginForm = () => {
         </h2>
       </div>
       {error && <p className="text-red-500 text-center">{error}</p>}
+      {resetEmailSent && (
+        <p className="text-green-500 text-center">Password reset email sent!</p>
+      )}
       <form onSubmit={handleLogin} className="mt-8 space-y-6">
         <div className="rounded-md shadow-sm">
           <div>
@@ -122,12 +143,13 @@ const LoginForm = () => {
           </div>
 
           <div className="text-sm">
-            <a
-              href="#"
+            <button
+              type="button"
+              onClick={handlePasswordReset}
               className="font-medium text-green-600 hover:text-green-500"
             >
               Forgot your password?
-            </a>
+            </button>
           </div>
         </div>
 

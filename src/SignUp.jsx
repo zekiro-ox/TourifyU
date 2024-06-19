@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./config/firebase"; // Adjust the path based on your directory structure
+import { auth } from "./config/firebase";
+import logo from "./assets/mainlogo.png"; // Adjust the path based on your directory structure
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +43,7 @@ const SignUpForm = () => {
 
   return (
     <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
+      <img src={logo} alt="Logo" className="w-24 mx-auto mb-4" />
       <h2 className="text-2xl font-bold text-center text-green-600">
         Create Your Account
       </h2>
