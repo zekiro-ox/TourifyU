@@ -2,30 +2,29 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./config/firebase"; // Adjust the path based on your directory structure
 import logo from "./assets/mainlogo.png"; // Adjust the path as necessary
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    // Prebuilt account credentials
-    const validEmail = "user@example.com";
-    const validPassword = "password123";
-
-    if (email === validEmail && password === validPassword) {
-      // Redirect to Home Page
-      navigate("/home");
-    } else {
-      alert("Invalid email or password. Please try again.");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/home"); // Redirect to home page after successful login
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -37,6 +36,7 @@ const LoginForm = () => {
           Login to Your Account
         </h2>
       </div>
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <form onSubmit={handleLogin} className="mt-8 space-y-6">
         <div className="rounded-md shadow-sm">
           <div>

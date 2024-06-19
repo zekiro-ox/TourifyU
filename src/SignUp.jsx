@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./config/firebase"; // Adjust the path based on your directory structure
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -15,12 +19,34 @@ const SignUpForm = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    const firstName = e.target["first-name"].value;
+    const lastName = e.target["last-name"].value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const confirmPassword = e.target["confirm-password"].value;
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate("/"); // Redirect to login page after successful sign-up
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-center text-green-600">
         Create Your Account
       </h2>
-      <form className="mt-8 space-y-6">
+      {error && <p className="text-red-500 text-center">{error}</p>}
+      <form onSubmit={handleSignUp} className="mt-8 space-y-6">
         <div className="rounded-md shadow-sm -space-y-px">
           <div>
             <label htmlFor="first-name" className="sr-only">
