@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "./assets/mainlogo.png"; // Adjust the path as necessary
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,9 +31,12 @@ const LoginForm = () => {
 
   return (
     <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-center text-green-600">
-        Login to Your Account
-      </h2>
+      <div className="text-center">
+        <img src={logo} alt="Logo" className="w-24 mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-green-600">
+          Login to Your Account
+        </h2>
+      </div>
       <form onSubmit={handleLogin} className="mt-8 space-y-6">
         <div className="rounded-md shadow-sm">
           <div>
