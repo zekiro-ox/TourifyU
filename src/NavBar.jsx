@@ -24,7 +24,7 @@ const Navbar = ({
           {/* Image Logo */}
           <Link to="/home" className="text-lg font-bold text-green-600 mr-20">
             <img
-              src="src/assets/mainlogo.png"
+              src="https://i.postimg.cc/jdxDDxSf/mainlogo.png"
               alt="MyApp Logo"
               className="h-12"
             />
