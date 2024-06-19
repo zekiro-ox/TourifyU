@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./NavBar"; // Adjust the import path based on your directory structure
+import SeatMap from "./SeatMap"; // Import SeatMap component
 
 const Booking = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [flightDate, setFlightDate] = useState("");
   const [seatPreference, setSeatPreference] = useState("");
+  const [selectedSeat, setSelectedSeat] = useState(null);
   const [error, setError] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -16,8 +18,8 @@ const Booking = () => {
     e.preventDefault();
 
     // Simple form validation
-    if (!name || !email || !flightDate || !seatPreference) {
-      setError("All fields are required");
+    if (!name || !email || !flightDate || !seatPreference || !selectedSeat) {
+      setError("All fields are required, including seat selection");
       return;
     }
 
@@ -27,6 +29,7 @@ const Booking = () => {
       email,
       flightDate,
       seatPreference,
+      selectedSeat,
     });
 
     // Reset form fields
@@ -34,10 +37,12 @@ const Booking = () => {
     setEmail("");
     setFlightDate("");
     setSeatPreference("");
+    setSelectedSeat(null);
     setError("");
 
     alert("Booking confirmed!");
   };
+
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -60,7 +65,7 @@ const Booking = () => {
         handleLogout={handleLogout}
       />
       <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold  text-green-600 text-center mb-8">
+        <h1 className="text-3xl font-bold text-green-600 text-center mb-8">
           Book Your Flight
         </h1>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -140,6 +145,13 @@ const Booking = () => {
                 <option value="Middle">Middle</option>
               </select>
             </div>
+            {seatPreference && (
+              <SeatMap
+                seatPreference={seatPreference}
+                selectedSeat={selectedSeat}
+                setSelectedSeat={setSelectedSeat}
+              />
+            )}
           </div>
 
           <div>
