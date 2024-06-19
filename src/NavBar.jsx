@@ -132,7 +132,7 @@ const Navbar = ({
         <div className="relative flex items-center space-x-4 ml-10">
           <button
             onClick={toggleDropdown}
-            className="flex items-center text-green-600 focus:outline-none"
+            className="flex items-center text-green-600 focus:outline-none mr-10"
           >
             <FontAwesomeIcon icon={faUserCircle} className="text-2xl" />
           </button>
