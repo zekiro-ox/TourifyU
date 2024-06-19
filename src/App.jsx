@@ -6,6 +6,7 @@ import Home from "./Home";
 import MockAssessment from "./MockAssessment";
 import SafetyProcedure from "./SafetyProcedure";
 import AirlineSpiel from "./AirlineSpiel";
+import Booking from "./Booking";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/mock-assessment" element={<MockAssessment />} />
           <Route path="/safety-procedure" element={<SafetyProcedure />} />
           <Route path="/airline-spiel" element={<AirlineSpiel />} />
+          <Route path="/booking" element={<Booking />} />
         </Routes>
       </div>
     </Router>
