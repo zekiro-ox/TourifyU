@@ -6,17 +6,18 @@ import Navbar from "./NavBar";
 const airlines = [
   {
     name: "Philippine Airlines",
-    image: "src/assets/PHair.jpg",
+    image: "https://cdn.manilastandard.net/wp-content/uploads/2021/12/pal.jpg",
     link: "https://www.philippineairlines.com/covid-information-hub/safety-measures",
   },
   {
     name: "Cebu Pacific",
-    image: "src/assets/CebuPacific.png",
+    image: "https://www.smsupermalls.com/data/uploads/2021/09/cebupac.png",
     link: "https://www.cebupacificair.com/en-PH/pages/travel-info/covid-travel-reminders/contactless-flight-guidelines",
   },
   {
     name: "AirAsia",
-    image: "src/assets/Air.png",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/AirAsia_Logo.svg/1280px-AirAsia_Logo.svg.png",
     link: "https://www.airasia.com/aa/covid-19/en/gb/flying-safe-with-airasia.html",
   },
 ];

@@ -21,12 +21,36 @@ const Home = () => {
 
   // Gallery items
   const destinations = [
-    { name: "Cebu", image: "src/assets/Cebu.jpg" },
-    { name: "Bohol", image: "src/assets/Bohol.jpg" },
-    { name: "Boracay", image: "src/assets/Boracay.jpg" },
-    { name: "Puerto Princesa, Palawan", image: "src/assets/Palawan.jpg" },
-    { name: "Siargao", image: "src/assets/Siargao.jpg" },
-    { name: "Baguio", image: "src/assets/Baguio.jpeg" },
+    {
+      name: "Cebu",
+      image:
+        "https://ik.imagekit.io/tvlk/blog/2017/11/Cebu-Tourist-Spot-1.jpg?tr=dpr-2,w-675",
+    },
+    {
+      name: "Bohol",
+      image:
+        "https://www.saferide.ph/wp-content/uploads/2021/04/top-10-bohol.jpg",
+    },
+    {
+      name: "Boracay",
+      image:
+        "https://www.agoda.com/wp-content/uploads/2024/05/boracay-philippines-1244x700.jpg",
+    },
+    {
+      name: "Puerto Princesa, Palawan",
+      image:
+        "https://www.camella.com.ph/wp-content/uploads/2022/03/Palawan-today-Camella.jpg",
+    },
+    {
+      name: "Siargao",
+      image:
+        "https://www.agoda.com/wp-content/uploads/2020/01/Things-to-do-in-Siargao-Island-Cloud-9-surfing-area-in-General-Luna.jpg",
+    },
+    {
+      name: "Baguio",
+      image:
+        "https://mybaguiocityguide.com/wp-content/uploads/2023/04/pexels-photo-12914725.jpeg",
+    },
   ];
 
   return (
