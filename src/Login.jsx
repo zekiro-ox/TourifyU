@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,7 +9,21 @@ import logo from "./assets/mainlogo.png"; // Adjust the path as necessary
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Load remembered email and password from localStorage
+    const rememberedEmail = localStorage.getItem("rememberedEmail");
+    const rememberedPassword = localStorage.getItem("rememberedPassword");
+    if (rememberedEmail && rememberedPassword) {
+      setEmail(rememberedEmail);
+      setPassword(rememberedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -17,11 +31,20 @@ const LoginForm = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+
+      if (rememberMe) {
+        // Save email and password to localStorage if "Remember me" is checked
+        localStorage.setItem("rememberedEmail", email);
+        localStorage.setItem("rememberedPassword", password);
+      } else {
+        // Clear localStorage if "Remember me" is unchecked
+        localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberedPassword");
+      }
+
       navigate("/home"); // Redirect to home page after successful login
     } catch (error) {
       setError(error.message);
@@ -49,6 +72,8 @@ const LoginForm = () => {
               type="email"
               autoComplete="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="relative block w-full px-3 py-2 border border-gray-300 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
               placeholder="Email address"
             />
@@ -63,6 +88,8 @@ const LoginForm = () => {
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="relative block w-full px-3 py-2 border border-gray-300 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
               placeholder="Password"
             />
@@ -82,6 +109,8 @@ const LoginForm = () => {
               id="remember-me"
               name="remember-me"
               type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
               className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
             />
             <label
