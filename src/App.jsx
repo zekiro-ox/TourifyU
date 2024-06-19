@@ -5,6 +5,7 @@ import SignUpForm from "./SignUp";
 import Home from "./Home";
 import MockAssessment from "./MockAssessment";
 import SafetyProcedure from "./SafetyProcedure";
+import AirlineSpiel from "./AirlineSpiel";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/mock-assessment" element={<MockAssessment />} />
           <Route path="/safety-procedure" element={<SafetyProcedure />} />
+          <Route path="/airline-spiel" element={<AirlineSpiel />} />
         </Routes>
       </div>
     </Router>
