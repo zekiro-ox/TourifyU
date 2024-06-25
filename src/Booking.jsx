@@ -56,7 +56,7 @@ const Booking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-green-100">
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-900">
       <Navbar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
@@ -65,13 +65,13 @@ const Booking = () => {
         handleLogout={handleLogout}
       />
       <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold text-green-600 text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
           Book Your Flight
         </h1>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-md shadow-sm">
-            <div>
+          <div className="rounded-md shadow-sm bg-white p-6">
+            <div className="mb-4">
               <label
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
@@ -89,7 +89,7 @@ const Booking = () => {
                 required
               />
             </div>
-            <div className="mt-4">
+            <div className="mb-4">
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
@@ -107,7 +107,7 @@ const Booking = () => {
                 required
               />
             </div>
-            <div className="mt-4">
+            <div className="mb-4">
               <label
                 htmlFor="flight-date"
                 className="block text-sm font-medium text-gray-700"
@@ -124,7 +124,7 @@ const Booking = () => {
                 required
               />
             </div>
-            <div className="mt-4">
+            <div className="mb-4">
               <label
                 htmlFor="seat-preference"
                 className="block text-sm font-medium text-gray-700"
@@ -157,7 +157,7 @@ const Booking = () => {
           <div>
             <button
               type="submit"
-              className="w-full px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Confirm Booking
             </button>

@@ -1,4 +1,3 @@
-// SafetyProcedure.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./NavBar";
@@ -38,8 +37,9 @@ const SafetyProcedure = () => {
   const handleLogout = () => {
     navigate("/");
   };
+
   return (
-    <div className="min-h-screen bg-green-100">
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-900">
       <Navbar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
@@ -48,23 +48,26 @@ const SafetyProcedure = () => {
         handleLogout={handleLogout}
       />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-green-600 text-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
           Safety Procedures for Airlines in the Philippines
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {airlines.map((airline, index) => (
             <div
               key={index}
-              className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white"
             >
-              <a href={airline.link}>
+              <a
+                href={airline.link}
+                className="block hover:bg-gray-100 transition-colors duration-300"
+              >
                 <img
                   src={airline.image}
                   alt={airline.name}
-                  className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 object-cover"
                 />
-                <div className="p-4 bg-white">
-                  <h3 className="text-xl font-semibold text-green-600 text-center">
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-blue-600 text-center">
                     {airline.name}
                   </h3>
                 </div>

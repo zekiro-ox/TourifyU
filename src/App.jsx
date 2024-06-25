@@ -11,17 +11,15 @@ import Booking from "./Booking";
 const App = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-green-100 flex items-center justify-center">
-        <Routes>
-          <Route path="/" element={<LoginForm />} />
-          <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/mock-assessment" element={<MockAssessment />} />
-          <Route path="/safety-procedure" element={<SafetyProcedure />} />
-          <Route path="/airline-spiel" element={<AirlineSpiel />} />
-          <Route path="/booking" element={<Booking />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<LoginForm />} />
+        <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/mock-assessment" element={<MockAssessment />} />
+        <Route path="/safety-procedure" element={<SafetyProcedure />} />
+        <Route path="/airline-spiel" element={<AirlineSpiel />} />
+        <Route path="/booking" element={<Booking />} />
+      </Routes>
     </Router>
   );
 };
