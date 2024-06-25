@@ -85,125 +85,152 @@ const Booking = () => {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-md shadow-sm bg-white p-6">
-            <div className="mb-4 grid grid-cols-2 gap-4">
-              <div>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="input-field"
-                  placeholder="First Name"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="input-field"
-                  placeholder="Last Name"
-                  required
-                />
-              </div>
-            </div>
-
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div className="mb-4">
+              <label
+                htmlFor="firstName"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                First Name
+              </label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="First Name"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="lastName"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Last Name
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Email Address
+              </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input-field"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Email Address"
                 required
               />
             </div>
-
             <div className="mb-4">
+              <label
+                htmlFor="currentLocation"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Current Location
+              </label>
               <input
-                id="current-location"
-                name="current-location"
+                id="currentLocation"
+                name="currentLocation"
                 type="text"
                 value={currentLocation}
                 onChange={(e) => setCurrentLocation(e.target.value)}
-                className="input-field"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Current Location"
                 required
               />
             </div>
-
             <div className="mb-4">
+              <label
+                htmlFor="destination"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Destination
+              </label>
               <input
                 id="destination"
                 name="destination"
                 type="text"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="input-field"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Destination"
                 required
               />
             </div>
-
             <div className="mb-4">
               <label
-                htmlFor="departure-date"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                htmlFor="departureDate"
+                className="block text-gray-700 text-sm font-bold mb-2"
               >
                 Departure Date
               </label>
               <input
-                id="departure-date"
-                name="departure-date"
+                id="departureDate"
+                name="departureDate"
                 type="date"
                 value={departureDate}
                 onChange={(e) => setDepartureDate(e.target.value)}
-                className="input-field"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
             </div>
-
             <div className="mb-4">
               <label
-                htmlFor="return-date"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                htmlFor="returnDate"
+                className="block text-gray-700 text-sm font-bold mb-2"
               >
                 Return Date
               </label>
               <input
-                id="return-date"
-                name="return-date"
+                id="returnDate"
+                name="returnDate"
                 type="date"
                 value={returnDate}
                 onChange={(e) => setReturnDate(e.target.value)}
-                className="input-field"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
             </div>
-
             <div className="mb-4">
+              <label
+                htmlFor="seatPreference"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Seat Preference
+              </label>
               <select
-                id="seat-preference"
-                name="seat-preference"
+                id="seatPreference"
+                name="seatPreference"
                 value={seatPreference}
                 onChange={(e) => setSeatPreference(e.target.value)}
-                className="input-field"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
-                <option value="">Seat Preference</option>
+                <option value="">Select Seat Preference</option>
                 <option value="Window">Window</option>
                 <option value="Aisle">Aisle</option>
                 <option value="Middle">Middle</option>
               </select>
             </div>
-
             {seatPreference && (
               <SeatMap
                 seatPreference={seatPreference}
@@ -216,7 +243,7 @@ const Booking = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Confirm Booking
             </button>
