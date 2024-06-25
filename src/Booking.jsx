@@ -1,50 +1,60 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./NavBar"; // Adjust the import path based on your directory structure
-import SeatMap from "./SeatMap"; // Import SeatMap component
+import Navbar from "./NavBar";
+import SeatMap from "./SeatMap";
 
 const Booking = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [flightDate, setFlightDate] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
+  const [currentLocation, setCurrentLocation] = useState("");
+  const [destination, setDestination] = useState("");
   const [seatPreference, setSeatPreference] = useState("");
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [error, setError] = useState("");
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple form validation
-    if (!name || !email || !flightDate || !seatPreference || !selectedSeat) {
+    if (
+      !name ||
+      !email ||
+      !departureDate ||
+      !returnDate ||
+      !currentLocation ||
+      !destination ||
+      !seatPreference ||
+      !selectedSeat
+    ) {
       setError("All fields are required, including seat selection");
       return;
     }
 
-    // Handle the form submission logic here
     console.log("Booking Details:", {
       name,
       email,
-      flightDate,
+      departureDate,
+      returnDate,
+      currentLocation,
+      destination,
       seatPreference,
       selectedSeat,
     });
 
-    // Reset form fields
     setName("");
     setEmail("");
-    setFlightDate("");
+    setDepartureDate("");
+    setReturnDate("");
+    setCurrentLocation("");
+    setDestination("");
     setSeatPreference("");
     setSelectedSeat(null);
     setError("");
 
     alert("Booking confirmed!");
-  };
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
   };
 
   const toggleMenu = () => {
@@ -60,91 +70,122 @@ const Booking = () => {
       <Navbar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
-        isDropdownOpen={isDropdownOpen}
-        toggleDropdown={toggleDropdown}
         handleLogout={handleLogout}
       />
-      <div className="container mx-auto p-8">
+
+      <div className="container mx-auto px-4 py-8 max-w-lg">
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
           Book Your Flight
         </h1>
+
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="rounded-md shadow-sm bg-white p-6">
             <div className="mb-4">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Name
-              </label>
               <input
                 id="name"
                 name="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                placeholder="Enter your name"
+                className="input-field"
+                placeholder="Name"
                 required
               />
             </div>
+
             <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                placeholder="Enter your email"
+                className="input-field"
+                placeholder="Email"
                 required
               />
             </div>
+
+            <div className="mb-4">
+              <input
+                id="current-location"
+                name="current-location"
+                type="text"
+                value={currentLocation}
+                onChange={(e) => setCurrentLocation(e.target.value)}
+                className="input-field"
+                placeholder="Current Location"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <input
+                id="destination"
+                name="destination"
+                type="text"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="input-field"
+                placeholder="Destination"
+                required
+              />
+            </div>
+
             <div className="mb-4">
               <label
-                htmlFor="flight-date"
-                className="block text-sm font-medium text-gray-700"
+                htmlFor="departure-date"
+                className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Flight Date
+                Departure Date
               </label>
               <input
-                id="flight-date"
-                name="flight-date"
+                id="departure-date"
+                name="departure-date"
                 type="date"
-                value={flightDate}
-                onChange={(e) => setFlightDate(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                value={departureDate}
+                onChange={(e) => setDepartureDate(e.target.value)}
+                className="input-field"
                 required
               />
             </div>
+
             <div className="mb-4">
               <label
-                htmlFor="seat-preference"
-                className="block text-sm font-medium text-gray-700"
+                htmlFor="return-date"
+                className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Seat Preference
+                Return Date
               </label>
+              <input
+                id="return-date"
+                name="return-date"
+                type="date"
+                value={returnDate}
+                onChange={(e) => setReturnDate(e.target.value)}
+                className="input-field"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
               <select
                 id="seat-preference"
                 name="seat-preference"
                 value={seatPreference}
                 onChange={(e) => setSeatPreference(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                className="input-field"
                 required
               >
-                <option value="">Select seat preference</option>
+                <option value="">Seat Preference</option>
                 <option value="Window">Window</option>
                 <option value="Aisle">Aisle</option>
                 <option value="Middle">Middle</option>
               </select>
             </div>
+
             {seatPreference && (
               <SeatMap
                 seatPreference={seatPreference}
@@ -154,10 +195,10 @@ const Booking = () => {
             )}
           </div>
 
-          <div>
+          <div className="flex justify-center">
             <button
               type="submit"
-              className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
               Confirm Booking
             </button>

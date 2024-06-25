@@ -37,35 +37,35 @@ const Navbar = ({
           <div className="hidden md:flex space-x-8">
             <NavLink
               to="/home"
-              className="text-white hover:text-gray-800"
+              className="text-white hover:text-gray-800 font-semibold"
               activeClassName="font-bold text-gray-800"
             >
               Home
             </NavLink>
             <NavLink
               to="/booking"
-              className="text-white hover:text-gray-800"
+              className="text-white hover:text-gray-800 font-semibold"
               activeClassName="font-bold text-gray-800"
             >
               Booking
             </NavLink>
             <NavLink
               to="/safety-procedure"
-              className="text-white hover:text-gray-800"
+              className="text-white hover:text-gray-800 font-semibold"
               activeClassName="font-bold text-gray-800"
             >
               Safety Procedure
             </NavLink>
             <NavLink
               to="/airline-spiel"
-              className="text-white hover:text-gray-800"
+              className="text-white hover:text-gray-800 font-semibold"
               activeClassName="font-bold text-gray-800"
             >
               Airline Spiel
             </NavLink>
             <NavLink
               to="/mock-assessment"
-              className="text-white hover:text-gray-800"
+              className="text-white hover:text-gray-800 font-semibold"
               activeClassName="font-bold text-gray-800"
             >
               Mock Assessment
