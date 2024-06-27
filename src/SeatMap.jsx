@@ -1,257 +1,223 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "./NavBar";
-import SeatMap from "./SeatMap";
+import Payment from "./Payment"; // Adjust the path as per your project structure
 
-const Booking = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [departureDate, setDepartureDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
-  const [currentLocation, setCurrentLocation] = useState("");
-  const [destination, setDestination] = useState("");
-  const [seatPreference, setSeatPreference] = useState("");
-  const [selectedSeat, setSelectedSeat] = useState(null);
-  const [error, setError] = useState("");
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
+const SeatMap = ({ selectedFlight }) => {
+  const [seatPreference, setSeatPreference] = useState("Window");
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [seatPrices] = useState({
+    "A-1": 5000,
+    "A-2": 5000,
+    "A-3": 5000,
+    "A-4": 5000,
+    "A-5": 5000,
+    "A-6": 5000,
+    "B-1": 3500,
+    "B-2": 3500,
+    "B-3": 3500,
+    "B-4": 3500,
+    "B-5": 3500,
+    "B-6": 3500,
+    "C-1": 3750,
+    "C-2": 3750,
+    "C-3": 3750,
+    "C-4": 3750,
+    "C-5": 3750,
+    "C-6": 3750,
+    "D-1": 4000,
+    "D-2": 4000,
+    "D-3": 4000,
+    "D-4": 4000,
+    "D-5": 4000,
+    "D-6": 4000,
+    "E-1": 6000,
+    "E-2": 6000,
+    "E-3": 6000,
+    "E-4": 6000,
+    "E-5": 6000,
+    "E-6": 6000,
+    "F-1": 4500,
+    "F-2": 4500,
+    "F-3": 4500,
+    "F-4": 4500,
+    "F-5": 4500,
+    "F-6": 4500,
+    "G-1": 4500,
+    "G-2": 4500,
+    "G-3": 4500,
+    "G-4": 4500,
+    "G-5": 4500,
+    "G-6": 4500,
+    "H-1": 7000,
+    "H-2": 7000,
+    "H-3": 7000,
+    "H-4": 7000,
+    "H-5": 7000,
+    "H-6": 7000,
+    "I-1": 8000,
+    "I-2": 8000,
+    "I-3": 8000,
+    "I-4": 8000,
+    "I-5": 8000,
+    "I-6": 8000,
+    "J-1": 10000,
+    "J-2": 10000,
+    "J-3": 10000,
+    "J-4": 10000,
+    "J-5": 10000,
+    "J-6": 10000,
+    // Add more seats and prices as needed
+  });
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Function to generate seats based on seat preference
+  const generateSeats = () => {
+    let seatsInRow;
 
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !departureDate ||
-      !returnDate ||
-      !currentLocation ||
-      !destination ||
-      !seatPreference ||
-      !selectedSeat
-    ) {
-      setError("All fields are required, including seat selection");
-      return;
+    switch (seatPreference) {
+      case "Window":
+        seatsInRow = 4;
+        break;
+      case "Aisle":
+        seatsInRow = 5;
+        break;
+      case "Middle":
+        seatsInRow = 6;
+        break;
+      default:
+        seatsInRow = 4;
     }
 
-    console.log("Booking Details:", {
-      firstName,
-      lastName,
-      email,
-      departureDate,
-      returnDate,
-      currentLocation,
-      destination,
-      seatPreference,
-      selectedSeat,
+    const seatRows = [];
+    const rows = "ABCDEFGHIJ"; // Letters for rows
+
+    for (let row = 0; row < 10; row++) {
+      // Iterate through rows array
+      const seats = [];
+      for (let seat = 1; seat <= seatsInRow; seat++) {
+        const seatId = `${rows[row]}-${seat}`; // Combine row letter and seat number
+        const isSelected = selectedSeats.includes(seatId); // Check if seat is selected
+
+        seats.push(
+          <div
+            key={seatId}
+            className={`p-4 border rounded-2xl shadow-xl cursor-pointer ${
+              isSelected ? "bg-blue-500 text-white" : "bg-white"
+            } w-16 h-16 flex items-center justify-center`} // Adjust w-16 and h-16 for fixed size
+            onClick={() => handleSeatClick(seatId)}
+          >
+            {seatId}
+          </div>
+        );
+      }
+      seatRows.push(
+        <div key={row} className="flex justify-center space-x-2 mb-2">
+          {seats}
+        </div>
+      );
+    }
+
+    return seatRows;
+  };
+
+  // Handler for seat click event
+  const handleSeatClick = (seatId) => {
+    if (selectedSeats.includes(seatId)) {
+      // Deselect the seat if already selected
+      setSelectedSeats(selectedSeats.filter((seat) => seat !== seatId));
+    } else {
+      // Select the seat if not selected
+      setSelectedSeats([...selectedSeats, seatId]);
+    }
+  };
+
+  // Calculate total price based on selected seats
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    selectedSeats.forEach((seat) => {
+      totalPrice += seatPrices[seat] || 0; // Add price of selected seat to total
     });
-
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setDepartureDate("");
-    setReturnDate("");
-    setCurrentLocation("");
-    setDestination("");
-    setSeatPreference("");
-    setSelectedSeat(null);
-    setError("");
-
-    alert("Booking confirmed!");
+    return totalPrice;
   };
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
+  // Handler for changing seat preference
+  const handleSeatPreferenceChange = (e) => {
+    setSeatPreference(e.target.value); // Update seat preference
+    setSelectedSeats([]); // Reset selected seats when changing preference
   };
 
-  const handleLogout = () => {
-    navigate("/");
+  // Handler for booking ticket
+  const handleBookTicket = () => {
+    // Perform booking actions or navigate to payment
+    setBookingConfirmed(true); // Confirm booking
+  };
+
+  // Callback function for payment completion
+  const handlePaymentComplete = () => {
+    // Perform actions after payment completion (e.g., redirect to confirmation page)
+    alert("Redirecting to confirmation page...");
+    // Implement further actions as needed
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-900">
-      <Navbar
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
-        handleLogout={handleLogout}
-      />
-
-      <div className="container mx-auto px-4 py-8 max-w-lg">
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
-          Book Your Flight
-        </h1>
-
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div className="mb-4">
-              <label
-                htmlFor="firstName"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                First Name
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="First Name"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="lastName"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Last Name
-              </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Last Name"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Email Address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Email Address"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="currentLocation"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Current Location
-              </label>
-              <input
-                id="currentLocation"
-                name="currentLocation"
-                type="text"
-                value={currentLocation}
-                onChange={(e) => setCurrentLocation(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Current Location"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="destination"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Destination
-              </label>
-              <input
-                id="destination"
-                name="destination"
-                type="text"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Destination"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="departureDate"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Departure Date
-              </label>
-              <input
-                id="departureDate"
-                name="departureDate"
-                type="date"
-                value={departureDate}
-                onChange={(e) => setDepartureDate(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="returnDate"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Return Date
-              </label>
-              <input
-                id="returnDate"
-                name="returnDate"
-                type="date"
-                value={returnDate}
-                onChange={(e) => setReturnDate(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="seatPreference"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Seat Preference
-              </label>
-              <select
-                id="seatPreference"
-                name="seatPreference"
-                value={seatPreference}
-                onChange={(e) => setSeatPreference(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              >
-                <option value="">Select Seat Preference</option>
-                <option value="Window">Window</option>
-                <option value="Aisle">Aisle</option>
-                <option value="Middle">Middle</option>
-              </select>
-            </div>
-            {seatPreference && (
-              <SeatMap
-                seatPreference={seatPreference}
-                selectedSeat={selectedSeat}
-                setSelectedSeat={setSelectedSeat}
-              />
-            )}
-          </div>
-
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    <div className="mt-6">
+      {!bookingConfirmed ? (
+        <>
+          <div className="mb-4">
+            <label
+              htmlFor="seatPreference"
+              className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Confirm Booking
+              Seat Preference
+            </label>
+            <select
+              id="seatPreference"
+              name="seatPreference"
+              value={seatPreference}
+              onChange={handleSeatPreferenceChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            >
+              <option value="Window">Window</option>
+              <option value="Aisle">Aisle</option>
+              <option value="Middle">Middle</option>
+            </select>
+          </div>
+          <h3 className="text-xl font-bold text-gray-700 mb-4 text-center">
+            Select Your Seat
+          </h3>
+          <div className="flex flex-col items-center mb-4">
+            {generateSeats()}
+            {/* Render generated seats based on current seatPreference */}
+          </div>
+          <div className="text-center">
+            <h4 className="text-lg font-bold text-gray-700 mb-2">
+              Total Price: ₱{calculateTotalPrice()}
+            </h4>
+            <p className="text-sm text-gray-500">
+              {selectedSeats.length > 0
+                ? `Selected Seats: ${selectedSeats.join(", ")}`
+                : "No seats selected"}
+            </p>
+            <button
+              onClick={handleBookTicket}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+              disabled={selectedSeats.length === 0} // Disable button if no seats are selected
+            >
+              Book Ticket
             </button>
           </div>
-        </form>
-      </div>
+        </>
+      ) : (
+        <Payment
+          totalPrice={calculateTotalPrice()}
+          selectedSeats={selectedSeats}
+          selectedFlight={selectedFlight}
+          seatPreference={seatPreference}
+          onPaymentComplete={handlePaymentComplete}
+        />
+      )}
     </div>
   );
 };
 
-export default Booking;
+export default SeatMap;
