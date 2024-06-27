@@ -74,6 +74,24 @@ const Booking = () => {
       departureTime: "09:30 AM",
       arrivalTime: "11:00 AM",
     },
+    {
+      id: 7,
+      airline: "Cebu Pacific",
+      flightNumber: "5J 003",
+      departure: "Manila",
+      destination: "Cebu",
+      departureTime: "02:00 AM",
+      arrivalTime: "03:30 AM",
+    },
+    {
+      id: 8,
+      airline: "Cebu Pacific",
+      flightNumber: "5J 004",
+      departure: "Manila",
+      destination: "Cebu",
+      departureTime: "02:00 PM",
+      arrivalTime: "03:30 PM",
+    },
   ];
 
   const handleSubmit = (e) => {
@@ -279,31 +297,28 @@ const Booking = () => {
               {filteredFlights.map((flight) => (
                 <div
                   key={flight.id}
-                  className="bg-gray-100 p-4 rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                  className="border rounded-lg p-4 hover:bg-gray-100 cursor-pointer"
                   onClick={() => handleFlightSelection(flight)}
                 >
-                  <p className="text-lg font-semibold text-blue-700 mb-1">
+                  <h3 className="text-lg font-semibold">
                     {flight.flightNumber}
+                  </h3>
+                  <p className="text-gray-700">
+                    Departure: {flight.departure} - {flight.departureTime}
                   </p>
-                  <p className="text-gray-600 mb-1">
-                    {flight.departure} to {flight.destination}
-                  </p>
-                  <p className="text-gray-600">
-                    Departure: {flight.departureTime} - Arrival:{" "}
-                    {flight.arrivalTime}
+                  <p className="text-gray-700">
+                    Destination: {flight.destination} - {flight.arrivalTime}
                   </p>
                 </div>
               ))}
             </div>
           </div>
         )}
+        {/* Display SeatMap only when a flight is selected */}
         {selectedFlight && (
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-8">
-            <h2 className="text-xl font-bold text-gray-800 text-center mb-4">
-              Seat Selection for {selectedFlight.flightNumber}
-            </h2>
             <SeatMap
-              selectedSeat={selectedSeat} // Pass selected seat
+              selectedFlight={selectedFlight}
               setSelectedSeat={handleSeatSelection}
             />
           </div>

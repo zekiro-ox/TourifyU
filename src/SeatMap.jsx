@@ -100,7 +100,7 @@ const SeatMap = ({ selectedFlight }) => {
         seats.push(
           <div
             key={seatId}
-            className={`p-4 border rounded-2xl shadow-xl cursor-pointer ${
+            className={`p-4 border rounded-2xl shadow-lg drop-shadow-md cursor-pointer ${
               isSelected ? "bg-blue-500 text-white" : "bg-white"
             } w-16 h-16 flex items-center justify-center`} // Adjust w-16 and h-16 for fixed size
             onClick={() => handleSeatClick(seatId)}
