@@ -12,6 +12,7 @@ const Booking = () => {
   const [destination, setDestination] = useState("");
   const [selectedSeat, setSelectedSeat] = useState(""); // State to hold selected seat
   const [error, setError] = useState("");
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [showFlights, setShowFlights] = useState(false); // State to control showing flights
   const [filteredFlights, setFilteredFlights] = useState([]); // State to hold filtered flights
@@ -129,6 +130,10 @@ const Booking = () => {
     setError("");
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
@@ -154,6 +159,8 @@ const Booking = () => {
       <Navbar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
+        isDropdownOpen={isDropdownOpen}
+        toggleDropdown={toggleDropdown}
         handleLogout={handleLogout}
       />
       <div className="container mx-auto px-4 py-8 max-w-lg">
