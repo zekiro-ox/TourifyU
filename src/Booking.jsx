@@ -8,7 +8,7 @@ const Booking = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
+  const [departure, setDeparture] = useState(""); // Changed from location to departure
   const [destination, setDestination] = useState("");
   const [selectedSeat, setSelectedSeat] = useState(""); // State to hold selected seat
   const [error, setError] = useState("");
@@ -80,21 +80,74 @@ const Booking = () => {
       airline: "Cebu Pacific",
       flightNumber: "5J 003",
       departure: "Manila",
-      destination: "Cebu",
+      destination: "Tokyo",
       departureTime: "02:00 AM",
-      arrivalTime: "03:30 AM",
+      arrivalTime: "07:30 AM",
     },
     {
       id: 8,
       airline: "Cebu Pacific",
       flightNumber: "5J 004",
       departure: "Manila",
-      destination: "Cebu",
+      destination: "Seoul",
       departureTime: "02:00 PM",
-      arrivalTime: "03:30 PM",
+      arrivalTime: "06:00 PM",
+    },
+    {
+      id: 9,
+      airline: "Philippine Airlines",
+      flightNumber: "PR 005",
+      departure: "Manila",
+      destination: "Sydney",
+      departureTime: "06:00 AM",
+      arrivalTime: "03:00 PM",
+    },
+    {
+      id: 10,
+      airline: "Philippine Airlines",
+      flightNumber: "PR 006",
+      departure: "Cebu",
+      destination: "Dubai",
+      departureTime: "11:00 PM",
+      arrivalTime: "05:00 AM",
+    },
+    {
+      id: 11,
+      airline: "AirAsia",
+      flightNumber: "AK 003",
+      departure: "Manila",
+      destination: "Kuala Lumpur",
+      departureTime: "12:00 PM",
+      arrivalTime: "02:30 PM",
+    },
+    {
+      id: 12,
+      airline: "Cebu Pacific",
+      flightNumber: "5J 005",
+      departure: "Davao",
+      destination: "Hong Kong",
+      departureTime: "05:00 AM",
+      arrivalTime: "07:30 AM",
+    },
+    {
+      id: 13,
+      airline: "Philippine Airlines",
+      flightNumber: "PR 007",
+      departure: "Davao",
+      destination: "Los Angeles",
+      departureTime: "09:00 PM",
+      arrivalTime: "07:00 AM",
+    },
+    {
+      id: 14,
+      airline: "AirAsia",
+      flightNumber: "AK 004",
+      departure: "Cebu",
+      destination: "Singapore",
+      departureTime: "03:00 PM",
+      arrivalTime: "06:00 PM",
     },
   ];
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -103,30 +156,25 @@ const Booking = () => {
       !firstName ||
       !lastName ||
       !email ||
-      !location ||
+      !departure ||
       !destination
     ) {
       setError("All fields are required");
       return;
     }
 
-    // Simulate searching for flights based on the selected airline
+    // Filter flights based on selected airline, departure, and destination
     const filteredFlights = mockFlights.filter(
-      (flight) => flight.airline === airline
+      (flight) =>
+        flight.airline === airline &&
+        flight.departure === departure &&
+        flight.destination === destination
     );
 
-    // Set state to show available flights and store filtered flights
     setShowFlights(true);
     setFilteredFlights(filteredFlights);
-
-    // Clear form fields
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setLocation("");
-    setDestination("");
-    setSelectedSeat(""); // Reset selected seat
-    setSelectedFlight(null); // Reset selected flight
+    setSelectedSeat("");
+    setSelectedFlight(null);
     setError("");
   };
 
@@ -250,21 +298,24 @@ const Booking = () => {
               </div>
               <div className="mb-4">
                 <label
-                  htmlFor="location"
+                  htmlFor="departure"
                   className="block text-gray-700 text-sm font-bold mb-2"
                 >
-                  Location
+                  Departure Location
                 </label>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                <select
+                  id="departure"
+                  name="departure"
+                  value={departure}
+                  onChange={(e) => setDeparture(e.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Location"
                   required
-                />
+                >
+                  <option value="">Select Departure Location</option>
+                  <option value="Manila">Manila</option>
+                  <option value="Cebu">Cebu</option>
+                  {/* Add other locations as needed */}
+                </select>
               </div>
               <div className="mb-4">
                 <label
@@ -273,61 +324,84 @@ const Booking = () => {
                 >
                   Destination
                 </label>
-                <input
+                <select
                   id="destination"
                   name="destination"
-                  type="text"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Destination"
                   required
-                />
+                >
+                  <option value="">Select Destination</option>
+                  <option value="Manila">Manila</option>
+                  <option value="Cebu">Cebu</option>
+                  {/* Add other destinations as needed */}
+                </select>
               </div>
             </div>
-            <div className="flex justify-center">
+            <div className="flex items-center justify-center">
               <button
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
-                Search Flight
+                Search Flights
               </button>
             </div>
           </form>
         ) : (
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            {/* Display available flights based on selected airline */}
-            <h2 className="text-xl font-bold text-gray-800 text-center mb-4">
-              Available Flights for {airline}
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
+              Available Flights
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {filteredFlights.map((flight) => (
-                <div
-                  key={flight.id}
-                  className="border rounded-lg p-4 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleFlightSelection(flight)}
-                >
-                  <h3 className="text-lg font-semibold">
-                    {flight.flightNumber}
-                  </h3>
-                  <p className="text-gray-700">
-                    Departure: {flight.departure} - {flight.departureTime}
-                  </p>
-                  <p className="text-gray-700">
-                    Destination: {flight.destination} - {flight.arrivalTime}
-                  </p>
-                </div>
-              ))}
-            </div>
+            {filteredFlights.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4">
+                {filteredFlights.map((flight) => (
+                  <div
+                    key={flight.id}
+                    className={`p-4 rounded-lg border ${
+                      selectedFlight && selectedFlight.id === flight.id
+                        ? "border-blue-500 bg-blue-100"
+                        : "border-gray-300 bg-white"
+                    }`}
+                    onClick={() => handleFlightSelection(flight)}
+                  >
+                    <h3 className="text-xl font-semibold">
+                      {flight.airline} - {flight.flightNumber}
+                    </h3>
+                    <p>Departure: {flight.departure}</p>
+                    <p>Destination: {flight.destination}</p>
+                    <p>
+                      Departure Time: {flight.departureTime} | Arrival Time:{" "}
+                      {flight.arrivalTime}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-600">
+                No flights available for the selected options.
+              </p>
+            )}
           </div>
         )}
-        {/* Display SeatMap only when a flight is selected */}
         {selectedFlight && (
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-8">
-            <SeatMap
-              selectedFlight={selectedFlight}
-              setSelectedSeat={handleSeatSelection}
-            />
+          <SeatMap
+            selectedSeat={selectedSeat}
+            onSeatSelect={handleSeatSelection}
+          />
+        )}
+        {selectedSeat && selectedFlight && (
+          <div className="flex items-center justify-center mt-8">
+            <button
+              onClick={() =>
+                navigate("/payment", {
+                  state: { selectedFlight, selectedSeat },
+                })
+              }
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Proceed to Payment
+            </button>
           </div>
         )}
       </div>
