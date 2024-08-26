@@ -72,7 +72,7 @@ const Navbar = () => {
               Safety Procedure
             </NavLink>
             <NavLink
-              to="/airline-spiel"
+              to="/spiel"
               className={({ isActive }) =>
                 `text-white font-semibold ${
                   isActive ? "border-b-2 border-white" : "hover:text-gray-100"
@@ -128,7 +128,7 @@ const Navbar = () => {
             Safety Procedure
           </NavLink>
           <NavLink
-            to="/airline-spiel"
+            to="/spiel"
             className="block px-4 py-2 text-white hover:bg-sky-700"
             activeclassname="font-bold bg-sky-700"
           >
