@@ -8,7 +8,7 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Navbar = ({
+const NavBar = ({
   isMenuOpen,
   toggleMenu,
   isDropdownOpen,
@@ -38,35 +38,35 @@ const Navbar = ({
             <NavLink
               to="/home"
               className="text-white hover:text-gray-800 font-semibold"
-              activeClassName="font-bold text-gray-800"
+              activeclassname="font-bold text-gray-800"
             >
               Home
             </NavLink>
             <NavLink
               to="/booking"
               className="text-white hover:text-gray-800 font-semibold"
-              activeClassName="font-bold text-gray-800"
+              activeclassname="font-bold text-gray-800"
             >
               Booking
             </NavLink>
             <NavLink
               to="/safety-procedure"
               className="text-white hover:text-gray-800 font-semibold"
-              activeClassName="font-bold text-gray-800"
+              activeclassname="font-bold text-gray-800"
             >
               Safety Procedure
             </NavLink>
             <NavLink
               to="/airline-spiel"
               className="text-white hover:text-gray-800 font-semibold"
-              activeClassName="font-bold text-gray-800"
+              activeclassname="font-bold text-gray-800"
             >
               Airline Spiel
             </NavLink>
             <NavLink
               to="/mock-assessment"
               className="text-white hover:text-gray-800 font-semibold"
-              activeClassName="font-bold text-gray-800"
+              activeclassname="font-bold text-gray-800"
             >
               Mock Assessment
             </NavLink>
@@ -93,35 +93,35 @@ const Navbar = ({
           <NavLink
             to="/home"
             className="block px-4 py-2 text-white hover:text-gray-800"
-            activeClassName="font-bold text-gray-800"
+            activeclassname="font-bold text-gray-800"
           >
             Home
           </NavLink>
           <NavLink
             to="/booking"
             className="block px-4 py-2 text-white hover:text-gray-800"
-            activeClassName="font-bold text-gray-800"
+            activeclassname="font-bold text-gray-800"
           >
             Booking
           </NavLink>
           <NavLink
             to="/safety-procedure"
             className="block px-4 py-2 text-white hover:text-gray-800"
-            activeClassName="font-bold text-gray-800"
+            activeclassname="font-bold text-gray-800"
           >
             Safety Procedure
           </NavLink>
           <NavLink
             to="/airline-spiel"
             className="block px-4 py-2 text-white hover:text-gray-800"
-            activeClassName="font-bold text-gray-800"
+            activeclassname="font-bold text-gray-800"
           >
             Airline Spiel
           </NavLink>
           <NavLink
             to="/mock-assessment"
             className="block px-4 py-2 text-white hover:text-gray-800"
-            activeClassName="font-bold text-gray-800"
+            activeclassname="font-bold text-gray-800"
           >
             Mock Assessment
           </NavLink>

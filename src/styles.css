@@ -1,0 +1,33 @@
+/* General styles */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* When menu is open, apply this class */
+.mobile-menu-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Optional: Additional transition styles for better appearance */
+.transition-fade-enter-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.transition-fade-exit-active {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}

@@ -49,7 +49,7 @@ const LoginForm = () => {
         localStorage.removeItem("rememberedPassword");
       }
 
-      navigate("/home"); // Redirect to home page after successful login
+      navigate("/dashboard"); // Redirect to home page after successful login
     } catch (error) {
       setError(error.message);
     }

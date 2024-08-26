@@ -2,11 +2,9 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginForm from "./Login";
 import SignUpForm from "./SignUp";
-import Home from "./Home";
-import MockAssessment from "./MockAssessment";
-import SafetyProcedure from "./SafetyProcedure";
-import AirlineSpiel from "./AirlineSpiel";
-import Booking from "./Booking";
+import Dashboard from "./Dashboard";
+import Book from "./Book";
+import Safety from "./Safety";
 
 const App = () => {
   return (
@@ -14,11 +12,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/mock-assessment" element={<MockAssessment />} />
-        <Route path="/safety-procedure" element={<SafetyProcedure />} />
-        <Route path="/airline-spiel" element={<AirlineSpiel />} />
-        <Route path="/booking" element={<Booking />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/book" element={<Book />} />
+        <Route path="/safety" element={<Safety />} />
       </Routes>
     </Router>
   );

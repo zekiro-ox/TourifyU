@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./NavBar";
 import SeatMap from "./SeatMap"; // Import SeatMap component
@@ -17,6 +17,8 @@ const Booking = () => {
   const [showFlights, setShowFlights] = useState(false); // State to control showing flights
   const [filteredFlights, setFilteredFlights] = useState([]); // State to hold filtered flights
   const [selectedFlight, setSelectedFlight] = useState(null); // State to hold selected flight
+  const [philippineDepartures, setPhilippineDepartures] = useState([]);
+  const [worldDestinations, setWorldDestinations] = useState([]);
   const navigate = useNavigate();
 
   // Mock flight data
@@ -148,6 +150,26 @@ const Booking = () => {
       arrivalTime: "06:00 PM",
     },
   ];
+
+  useEffect(() => {
+    // Extract unique Philippine departure locations
+    const departures = [
+      ...new Set(mockFlights.map((flight) => flight.departure)),
+    ];
+    setPhilippineDepartures(
+      departures.filter(
+        (location) =>
+          location === "Manila" || location === "Cebu" || location === "Davao"
+      )
+    ); // Add more Philippine locations if needed
+
+    // Extract unique destinations globally
+    const destinations = [
+      ...new Set(mockFlights.map((flight) => flight.destination)),
+    ];
+    setWorldDestinations(destinations);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -263,7 +285,7 @@ const Booking = () => {
               <div className="mb-4">
                 <label
                   htmlFor="lastName"
-                  className="block text-gray-700 text-sm font-bold mb-2"
+                  className="block text-gray-700                   text-sm font-bold mb-2"
                 >
                   Last Name
                 </label>
@@ -283,7 +305,7 @@ const Booking = () => {
                   htmlFor="email"
                   className="block text-gray-700 text-sm font-bold mb-2"
                 >
-                  Email Address
+                  Email
                 </label>
                 <input
                   id="email"
@@ -292,7 +314,7 @@ const Booking = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Email Address"
+                  placeholder="Email"
                   required
                 />
               </div>
@@ -301,7 +323,7 @@ const Booking = () => {
                   htmlFor="departure"
                   className="block text-gray-700 text-sm font-bold mb-2"
                 >
-                  Departure Location
+                  Departure
                 </label>
                 <select
                   id="departure"
@@ -312,9 +334,11 @@ const Booking = () => {
                   required
                 >
                   <option value="">Select Departure Location</option>
-                  <option value="Manila">Manila</option>
-                  <option value="Cebu">Cebu</option>
-                  {/* Add other locations as needed */}
+                  {philippineDepartures.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="mb-4">
@@ -333,75 +357,85 @@ const Booking = () => {
                   required
                 >
                   <option value="">Select Destination</option>
-                  <option value="Manila">Manila</option>
-                  <option value="Cebu">Cebu</option>
-                  {/* Add other destinations as needed */}
+                  {worldDestinations.map((dest) => (
+                    <option key={dest} value={dest}>
+                      {dest}
+                    </option>
+                  ))}
                 </select>
               </div>
-            </div>
-            <div className="flex items-center justify-center">
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Search Flights
-              </button>
+              <div className="flex items-center justify-between">
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                  Search Flights
+                </button>
+              </div>
             </div>
           </form>
         ) : (
-          <div className="mt-8">
+          <div>
             <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
               Available Flights
             </h2>
             {filteredFlights.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4">
+              <ul className="space-y-4">
                 {filteredFlights.map((flight) => (
-                  <div
+                  <li
                     key={flight.id}
-                    className={`p-4 rounded-lg border ${
-                      selectedFlight && selectedFlight.id === flight.id
-                        ? "border-blue-500 bg-blue-100"
-                        : "border-gray-300 bg-white"
+                    className={`p-4 border rounded-lg cursor-pointer ${
+                      selectedFlight === flight
+                        ? "bg-blue-100 border-blue-500"
+                        : "bg-white"
                     }`}
                     onClick={() => handleFlightSelection(flight)}
                   >
-                    <h3 className="text-xl font-semibold">
-                      {flight.airline} - {flight.flightNumber}
-                    </h3>
-                    <p>Departure: {flight.departure}</p>
-                    <p>Destination: {flight.destination}</p>
-                    <p>
-                      Departure Time: {flight.departureTime} | Arrival Time:{" "}
-                      {flight.arrivalTime}
-                    </p>
-                  </div>
+                    <div className="flex justify-between">
+                      <div>
+                        <p className="font-bold">
+                          {flight.airline} - {flight.flightNumber}
+                        </p>
+                        <p>{`Departure: ${flight.departureTime}, Arrival: ${flight.arrivalTime}`}</p>
+                      </div>
+                      <div>
+                        <p className="text-right">
+                          {flight.departure} to {flight.destination}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
-              <p className="text-center text-gray-600">
+              <p className="text-center text-red-500">
                 No flights available for the selected options.
               </p>
             )}
-          </div>
-        )}
-        {selectedFlight && (
-          <SeatMap
-            selectedSeat={selectedSeat}
-            onSeatSelect={handleSeatSelection}
-          />
-        )}
-        {selectedSeat && selectedFlight && (
-          <div className="flex items-center justify-center mt-8">
-            <button
-              onClick={() =>
-                navigate("/payment", {
-                  state: { selectedFlight, selectedSeat },
-                })
-              }
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Proceed to Payment
-            </button>
+            {selectedFlight && (
+              <div className="mt-8">
+                <h3 className="text-xl font-bold text-gray-800 text-center mb-4">
+                  Select Your Seat
+                </h3>
+                <SeatMap
+                  selectedSeat={selectedSeat}
+                  onSeatSelect={handleSeatSelection}
+                />
+                <div className="flex justify-center mt-4">
+                  <button
+                    onClick={() =>
+                      navigate("/payment", {
+                        state: { selectedFlight, selectedSeat },
+                      })
+                    }
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    disabled={!selectedSeat}
+                  >
+                    Proceed to Payment
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
