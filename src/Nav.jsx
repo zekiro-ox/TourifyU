@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
   faBars,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { getAuth, signOut } from "firebase/auth"; // Import Firebase auth
 import "./styles.css"; // Import your CSS file for transitions
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [navbarSolid, setNavbarSolid] = useState(false);
+  const navigate = useNavigate(); // To navigate after logout
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   const handleLogout = () => {
-    // Handle logout logic here
-    console.log("Logging out...");
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        console.log("Logged out successfully");
+        navigate("/"); // Redirect to login page after logout
+      })
+      .catch((error) => {
+        console.error("Error logging out: ", error);
+      });
   };
 
   const handleScroll = () => {
@@ -151,7 +160,7 @@ const Navbar = () => {
           >
             <FontAwesomeIcon
               icon={faUserCircle}
-              className="text-2xl text-white"
+              className="text-2xl text-white opacity-75"
             />
           </button>
           {isDropdownOpen && (

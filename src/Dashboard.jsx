@@ -43,28 +43,42 @@ const Dashboard = () => {
       image:
         "https://www.agoda.com/wp-content/uploads/2024/05/boracay-philippines-1244x700.jpg",
       description:
-        "Boracay is renowned for its white sandy beaches and crystal-clear waters.",
+        "Boracay ([bɔˈrakaɪ]; often locally shortened to Bora) is a resort island in the Western Visayas region of the Philippines, located 0.8 kilometers (0.50 mi) off the northwest coast of Panay island. It has a total land area of 10.32 square kilometers (3.98 sq mi), under the jurisdiction of three barangays in Malay, Aklan, and had a population of 37,802 in 2020.\n" +
+        "Boracay was originally inhabited by the Tumandok and Ati people, but commercial development has led to their severe marginalization since the 1970s.\n" +
+        "Boracay is famous for its white sand beaches and is considered one of the world's top destinations for relaxation. As of 2013, it was emerging as one of the top destinations for tranquility and nightlife.\n" +
+        "In 2012, the international travel magazine Travel + Leisure ranked Boracay as the Best Island in the World. In 2014, Condé Nast Traveler placed the island at the top of its 'Best Islands in the World' list, and in 2016, Boracay topped the magazine's list of 'Top 10 destinations to watch.'\n" +
+        "In April 2018, the Philippine government, under President Rodrigo Duterte, decreed a six-month closure of the island to undertake major renovation works, particularly of the sewage system. The island was administered by the Boracay Inter-agency Task Force during the closure, which ended in October 2018 with new rules to address various issues.\n" +
+        "In January 2024, the Boracay Ati-atihan festival saw a record-breaking number of tourists, with 36,741 people participating in the event. This festival, celebrating the cultural heritage of the Ati indigenous people, has become a major draw for tourists and is set to be elevated as a major tourism attraction for the island starting next year.\n",
     },
     {
       name: "Puerto Princesa, Palawan",
       image:
         "https://www.camella.com.ph/wp-content/uploads/2022/03/Palawan-today-Camella.jpg",
       description:
-        "Puerto Princesa boasts the UNESCO-listed Underground River and beautiful islands.",
+        "Puerto Princesa ([ˌpwɛɾ.to pɾɪnˈsɛ.sɐ]), officially the City of Puerto Princesa (Cuyonon: Siyudad i'ang Puerto Princesa; Filipino: Lungsod ng Puerto Princesa), is a 1st class highly urbanized city in the Mimaropa region of the Philippines. According to the 2020 census, it has a population of 307,079.\n" +
+        "It is located in the western Philippine province of Palawan and is the westernmost city in the Philippines. Though the seat of government and capitol of the province, Puerto Princesa is one of 38 independent cities within the Philippines not controlled by the province in which it is geographically located and is therefore an independent area for geographical and statistical purposes.\n" +
+        "Puerto Princesa is the largest city in the province of Palawan and the Mimaropa region. It is also the least densely populated city in the Philippines, with 110 inhabitants per square kilometer (280 inhabitants/sq mi). In terms of land area, it is the second largest geographically after Davao City, with an area of 2,381.02 square kilometers (919.32 sq mi).\n" +
+        "Puerto Princesa is the location of the Philippines' Western Command headquarters.\n" +
+        "Today, Puerto Princesa is a tourist city with many beach resorts and seafood restaurants. It has been acclaimed several times as the cleanest and greenest city in the Philippines.\n",
     },
     {
       name: "Siargao",
       image:
         "https://www.agoda.com/wp-content/uploads/2020/01/Things-to-do-in-Siargao-Island-Cloud-9-surfing-area-in-General-Luna.jpg",
       description:
-        "Siargao is a surfer's paradise with its world-famous Cloud 9 waves.",
+        "Siargao is a tear-drop shaped island in the Philippine Sea, situated 196 kilometers southeast of Tacloban. It has a land area of approximately 437 square kilometers (169 sq mi). The east coast is relatively straight with one deep inlet, Port Pilar, and the coastline is marked by a succession of reefs, small points, and white sandy beaches. The neighboring islands and islets have similar landforms.\n" +
+        "Siargao is known as the surfing capital of the Philippines and was voted the Best Island in Asia in the 2021 Condé Nast Travelers Readers' awards. The island is within the jurisdiction of the province of Surigao del Norte and is composed of 9 municipalities: Burgos, Dapa, Del Carmen, General Luna, San Benito, Pilar, San Isidro, Santa Monica, and Socorro.\n" +
+        "Siargao is a famous tourist destination, celebrated for its many surfing spots and featured in the film 'Siargao' for these qualities. Surfing is deeply ingrained in the identity of Siargao, to the extent that in 2022, two political families from Surigao Del Norte traded barbs over the cancellation of a national surfing competition hosted on the island.\n",
     },
     {
       name: "Baguio",
       image:
         "https://mybaguiocityguide.com/wp-content/uploads/2023/04/pexels-photo-12914725.jpeg",
       description:
-        "Baguio is known as the Summer Capital of the Philippines with its cool climate and pine forests.",
+        "Baguio (UK: /ˈbæɡioʊ/ BAG-ee-oh, US: /ˈbɑːɡiˈoʊ/ BAH-ghee-oh, -⁠OH, Tagalog: [ˈbagjɔ]), officially the City of Baguio (Ibaloi: Siudad ne Bagiw; Ilocano: Siudad ti Baguio; Tagalog: Lungsod ng Baguio), is a 1st class highly urbanized city in the Cordillera Administrative Region, Philippines. It is known as the 'Summer Capital of the Philippines,' owing to its cool climate, as the city is located approximately 4,810 feet (1,470 meters) above mean sea level, often cited as 1,540 meters (5,050 feet) in the Luzon tropical pine forests ecoregion. This elevation makes it conducive for the growth of mossy plants, orchids, and pine trees, which is why it is also called the 'City of Pines.'\n" +
+        "Baguio was established as a hill station by the United States in 1900 at the site of an Ibaloi village known as Kafagway. It was the United States' only hill station in Asia.\n" +
+        "Baguio is classified as a highly urbanized city (HUC) and is the largest city in Benguet, serving as the provincial capital from 1901 to 1916. However, it has been administered independently from the province following its conversion into a chartered city. Baguio is geographically located within the province of Benguet for geographical and statistical purposes by the Philippine Statistics Authority.\n" +
+        "The city is the center of business, commerce, and education in northern Luzon, as well as the most populous and the seat of government of the Cordillera Administrative Region. According to the 2024 census, Baguio has a population of 400,000.\n",
     },
 
     // Other destinations...
