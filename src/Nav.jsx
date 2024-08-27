@@ -164,10 +164,10 @@ const Navbar = () => {
             />
           </button>
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white bg-opacity-75 border border-gray-200 rounded-md shadow-lg z-10">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white bg-opacity-75  rounded-lg shadow-lg z-10">
               <button
                 onClick={handleLogout}
-                className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100"
+                className="block w-full font-semibold rounded-lg px-4 py-2 text-left text-gray-800 hover:bg-gray-100"
               >
                 Logout
               </button>
