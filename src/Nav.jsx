@@ -71,6 +71,16 @@ const Navbar = () => {
               Booking
             </NavLink>
             <NavLink
+              to="/itinerary-plan" /* Added Itinerary Plan */
+              className={({ isActive }) =>
+                `text-white font-semibold ${
+                  isActive ? "border-b-2 border-white" : "hover:text-gray-100"
+                }`
+              }
+            >
+              Itinerary Plan
+            </NavLink>
+            <NavLink
               to="/safety"
               className={({ isActive }) =>
                 `text-white font-semibold ${
@@ -128,6 +138,13 @@ const Navbar = () => {
             activeclassname="font-bold bg-sky-700"
           >
             Booking
+          </NavLink>
+          <NavLink
+            to="/itinerary-plan" /* Added Itinerary Plan */
+            className="block px-4 py-2 text-white hover:bg-sky-700"
+            activeclassname="font-bold bg-sky-700"
+          >
+            Itinerary Plan
           </NavLink>
           <NavLink
             to="/safety"

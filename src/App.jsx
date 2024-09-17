@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard";
 import Book from "./Book";
 import Safety from "./Safety";
 import Spiel from "./Spiel";
+import ItineraryPlan from "./Itinerary";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/book" element={<Book />} />
         <Route path="/safety" element={<Safety />} />
         <Route path="/spiel" element={<Spiel />} />
+        <Route path="/itinerary-plan" element={<ItineraryPlan />} />
       </Routes>
     </Router>
   );
