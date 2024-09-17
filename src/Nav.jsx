@@ -7,7 +7,8 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { getAuth, signOut } from "firebase/auth"; // Import Firebase auth
-import "./styles.css"; // Import your CSS file for transitions
+import "./styles.css";
+import logo from "./assets/mainlogo.png"; // Import your CSS file for transitions
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,11 +54,7 @@ const Navbar = () => {
         {/* Logo and Links for Large Screens */}
         <div className="flex items-center space-x-8">
           <Link to="/dashboard" className="flex items-center text-white">
-            <img
-              src="https://i.postimg.cc/jdxDDxSf/mainlogo.png"
-              alt="MyApp Logo"
-              className="h-12"
-            />
+            <img src={logo} alt="MyApp Logo" className="h-12" />
           </Link>
           <div className="hidden md:flex space-x-8">
             <NavLink
