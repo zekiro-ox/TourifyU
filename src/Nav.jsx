@@ -98,7 +98,7 @@ const Navbar = () => {
               Airline Spiel
             </NavLink>
             <NavLink
-              to="/mock-assessment"
+              to="/mock"
               className={({ isActive }) =>
                 `text-white font-semibold ${
                   isActive ? "border-b-2 border-white" : "hover:text-gray-100"

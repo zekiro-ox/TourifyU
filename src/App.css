@@ -1,3 +1,9 @@
+/* Slick Carousel */
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';
+
+
+
 .seat {
     width: 60px; /* Adjust as needed */
     height: 60px; /* Adjust as needed */
@@ -22,3 +28,10 @@
   .fade-exit-active {
     opacity: 0;
   }
+
+  .fixed-image {
+    width: 100%; /* or any specific width, e.g., 300px */
+    height: 200px; /* Fixed height */
+    object-fit: cover; /* Maintain aspect ratio */
+  }
+  
