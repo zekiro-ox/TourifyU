@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./Nav";
 import SeatMap from "./Seat";
+import PaymentModal from "./PaymentModal";
 
 const flightsData = [
   // One-way flights
@@ -92,6 +93,8 @@ const Book = () => {
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [seatPreference, setSeatPreference] = useState("");
   const [numPassengers, setNumPassengers] = useState("");
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -117,9 +120,21 @@ const Book = () => {
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    // Implement form submission logic here
-    console.log("Booking Submitted");
-    // Redirect or show confirmation as needed
+    // Calculate total price
+    const price = parseFloat(selectedFlight.price.replace("$", "")); // Remove the dollar sign and convert to float
+    const total = price * numPassengers; // Calculate total price
+    setTotalPrice(total); // Set the total price
+    setIsPaymentModalOpen(true); // Open payment modal when booking is submitted
+  };
+
+  const handleCloseModal = () => {
+    setIsPaymentModalOpen(false);
+  };
+
+  const handleSubmitPayment = () => {
+    setIsPaymentModalOpen(false); // Close the modal after payment
+    console.log("Payment Submitted");
+    // You can implement the logic to process the payment or show confirmation here
   };
 
   return (
@@ -449,6 +464,13 @@ const Book = () => {
           </div>
         </div>
       </div>
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={handleCloseModal}
+        onSubmitPayment={handleSubmitPayment}
+        totalPrice={totalPrice} // Pass total price
+      />
     </div>
   );
 };
