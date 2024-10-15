@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Navbar from "./Nav";
 import SeatMap from "./Seat";
-import PaymentModal from "./PaymentModal";
+import QRCode from "qrcode.react";
+import PhilippineAirline from "./assets/PHair.jpg";
+import CebuPacific from "./assets/CebuPacific.png";
+import AirAsia from "./assets/Air.png";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import QRCodeStyling from "qr-code-styling";
 
 const flightsData = [
   // One-way flights
@@ -93,8 +99,12 @@ const Book = () => {
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [seatPreference, setSeatPreference] = useState("");
   const [numPassengers, setNumPassengers] = useState("");
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState("creditCard"); // New state for payment method
+  const [totalPrice, setTotalPrice] = useState(0); // New state for total price
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(true);
+  const [showTicketDetails, setShowTicketDetails] = useState(false);
+  const ticketRef = useRef(null);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -116,25 +126,58 @@ const Book = () => {
 
   const handleBookNow = (flight) => {
     setSelectedFlight(flight);
+    setTotalPrice(parseFloat(flight.price.replace("$", "")) * numPassengers); // Calculate total price
   };
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    // Calculate total price
-    const price = parseFloat(selectedFlight.price.replace("$", "")); // Remove the dollar sign and convert to float
-    const total = price * numPassengers; // Calculate total price
-    setTotalPrice(total); // Set the total price
-    setIsPaymentModalOpen(true); // Open payment modal when booking is submitted
+    if (selectedFlight && numPassengers) {
+      setTotalPrice(
+        parseFloat(selectedFlight.price.replace("$", "")) * numPassengers
+      );
+      setShowBookingForm(false);
+      setShowPaymentForm(true);
+    } else {
+      console.error("Error: selectedFlight or numPassengers is null or empty");
+    }
   };
 
-  const handleCloseModal = () => {
-    setIsPaymentModalOpen(false);
+  const handlePaymentSubmit = (e) => {
+    e.preventDefault();
+    setShowPaymentForm(false);
+    setShowTicketDetails(true);
+    console.log("Payment submitted for booking:", selectedFlight);
   };
 
-  const handleSubmitPayment = () => {
-    setIsPaymentModalOpen(false); // Close the modal after payment
-    console.log("Payment Submitted");
-    // You can implement the logic to process the payment or show confirmation here
+  const ticketDetails = selectedFlight
+    ? {
+        flightNumber: selectedFlight.id,
+        from: selectedFlight.from,
+        to: selectedFlight.to,
+        departureDate: selectedFlight.departDate,
+        returnDate: selectedFlight.returnDate,
+        airline: selectedFlight.airline,
+        price: selectedFlight.price,
+        numPassengers: numPassengers,
+        totalPrice: totalPrice.toFixed(2),
+      }
+    : {};
+  const handleDownloadTicket = async () => {
+    const ticketContainer = document.getElementById("ticket-container");
+    const canvas = await html2canvas(ticketContainer);
+    const dataURL = canvas.toDataURL();
+    const pdf = new jsPDF();
+
+    // Set the image size
+    const width = 150;
+    const height = 297;
+
+    // Set the default page size to match the image size
+    pdf.internal.pageSize.width = width;
+    pdf.internal.pageSize.height = height;
+
+    pdf.addImage(dataURL, "PNG", 0, 0, width, height, undefined, "FAST");
+    pdf.save("ticket.pdf");
   };
 
   return (
@@ -331,11 +374,12 @@ const Book = () => {
                   </p>
                 )}
               </>
-            ) : (
+            ) : showBookingForm ? (
               <>
                 <h2 className="text-xl font-bold text-gray-800 mb-6">
                   Booking Form
                 </h2>
+
                 <form onSubmit={handleBookingSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -397,7 +441,7 @@ const Book = () => {
                       name="seatPreference"
                       value={seatPreference}
                       onChange={(e) => setSeatPreference(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus: ring-1 focus:ring-sky-500 sm:text-sm"
                     >
                       <option value="">Select</option>
                       <option value="Window">Window</option>
@@ -460,17 +504,215 @@ const Book = () => {
                   </button>
                 </form>
               </>
-            )}
+            ) : showPaymentForm ? (
+              <div className=" p-6   max-w-md mx-auto mt-10">
+                <h2 className="text-xl font-bold text-gray-800 mb-6">
+                  Payment Details
+                </h2>
+                <div className="mb-4">
+                  <p className="text-md font-semibold text-gray-800">
+                    Total Price: ${totalPrice.toFixed(2)}
+                  </p>
+                </div>
+
+                {/* Payment Method Selection */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Payment Method
+                  </label>
+                  <div className="flex space-x-4">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="creditCard"
+                        checked={paymentMethod === "creditCard"}
+                        onChange={() => setPaymentMethod("creditCard")}
+                        className="mr-2"
+                      />
+                      Credit Card
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="paypal"
+                        checked={paymentMethod === "paypal"}
+                        onChange={() => setPaymentMethod("paypal")}
+                        className="mr-2"
+                      />
+                      PayPal
+                    </label>
+                  </div>
+                </div>
+
+                {paymentMethod === "creditCard" && (
+                  <>
+                    <div className="mb-4">
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Card Holder Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label
+                        htmlFor="cardNumber"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Card Number{" "}
+                      </label>
+                      <input
+                        type="text"
+                        id="cardNumber"
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label
+                        htmlFor="expiryDate"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Expiry Date
+                      </label>
+                      <input
+                        type="text"
+                        id="expiryDate"
+                        placeholder="MM/YY"
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label
+                        htmlFor="cvv"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        CVV
+                      </label>
+                      <input
+                        type="text"
+                        id="cvv"
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                  </>
+                )}
+                {paymentMethod === "paypal" && (
+                  <div className="mb-4">
+                    <label
+                      htmlFor="paypalEmail"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      PayPal Email
+                    </label>
+                    <input
+                      type="email"
+                      id="paypalEmail"
+                      required
+                      placeholder="your-email@example.com"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow -sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                    />
+                  </div>
+                )}
+                <form onSubmit={handlePaymentSubmit} id="payment-form">
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowPaymentForm(false);
+                        setShowBookingForm(true);
+                      }}
+                      className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600"
+                    >
+                      Submit Payment
+                    </button>
+                  </div>
+                </form>
+              </div>
+            ) : showTicketDetails ? (
+              <div
+                className="bg-white p-4 max-w-md mx-auto text-center"
+                ref={ticketRef}
+              >
+                <h2 className="text-xl font-bold text-gray-800 mb-4">
+                  Ticket Details
+                </h2>
+                <div id="ticket-container">
+                  <div className="mb-4">
+                    {selectedFlight.airline === "Philippine Airlines" && (
+                      <img
+                        src={PhilippineAirline}
+                        alt="Philippine Airlines"
+                        className="w-full h-24 mb-4 object-cover"
+                      />
+                    )}
+                    {selectedFlight.airline === "Cebu Pacific" && (
+                      <img
+                        src={CebuPacific}
+                        alt="Cebu Pacific"
+                        className="w-full h-24 mb-4 object-cover"
+                      />
+                    )}
+                    {selectedFlight.airline === "Air Asia" && (
+                      <img
+                        src={AirAsia}
+                        alt="Air Asia"
+                        className="w-full h-24 mb-4 object-cover"
+                      />
+                    )}
+                    <p className="text-md font-semibold text-gray-800">
+                      Flight Number: {selectedFlight.id}
+                    </p>
+                    <p className="text-md font-semibold text-gray-800">
+                      From: {selectedFlight.from}
+                    </p>
+                    <p className="text-md font-semibold text-gray-800">
+                      To: {selectedFlight.to}
+                    </p>
+                    {selectedFlight.returnDate && (
+                      <p className="text-md font-semibold text-gray-800">
+                        Return Date: {selectedFlight.returnDate}
+                      </p>
+                    )}
+
+                    <p className="text-md font-semibold text-gray-800">
+                      Total Price: ${totalPrice.toFixed(2)}
+                    </p>
+                  </div>
+                  <QRCode
+                    value={JSON.stringify(ticketDetails)}
+                    size={200}
+                    level={"H"}
+                    includeMargin={true}
+                  />
+                </div>
+                <button
+                  className="px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600"
+                  onClick={handleDownloadTicket}
+                >
+                  Download Ticket
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={handleCloseModal}
-        onSubmitPayment={handleSubmitPayment}
-        totalPrice={totalPrice} // Pass total price
-      />
     </div>
   );
 };
