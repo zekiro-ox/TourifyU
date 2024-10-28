@@ -28,8 +28,16 @@ const SignUpForm = () => {
     const password = e.target.password.value;
     const confirmPassword = e.target["confirm-password"].value;
 
+    // Regular expression to check for special characters
+    const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+
+    if (!specialCharacterRegex.test(password)) {
+      setError("Password must contain at least one special character");
       return;
     }
 

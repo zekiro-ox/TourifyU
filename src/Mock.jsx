@@ -312,7 +312,7 @@ const Mock = () => {
             aria-modal="true"
           >
             <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-4xl p-2"
               onClick={handleCloseModal}
               aria-label="Close Modal"
             >
