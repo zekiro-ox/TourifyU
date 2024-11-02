@@ -151,7 +151,7 @@ const Dashboard = () => {
     {
       name: "Baguio",
       image:
-        "https://mybaguiocityguide.com/wp-content/uploads/2023/04/pexels-photo-12914725.jpeg",
+        "https://i0.wp.com/mybaguiocityguide.com/wp-content/uploads/2023/10/pexels-photo-12914725.jpeg?fit=1880%2C1061&ssl=1",
       spots: [
         {
           label: "Burnham Park",
