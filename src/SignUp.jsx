@@ -31,13 +31,32 @@ const SignUpForm = () => {
     // Regular expression to check for special characters
     const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
+    // Check password length
+    if (password.length < 12 || password.length > 16) {
+      setError("Password must be between 12 and 16 characters");
+      return;
+    }
+
+    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
+    // Check for special characters
     if (!specialCharacterRegex.test(password)) {
       setError("Password must contain at least one special character");
+      return;
+    }
+
+    // Check for common words
+    const commonWords = [
+      firstName.toLowerCase(),
+      lastName.toLowerCase(),
+      email.split("@")[0].toLowerCase(),
+    ];
+    if (commonWords.some((word) => password.toLowerCase().includes(word))) {
+      setError("Password must not contain common words or parts of your email");
       return;
     }
 

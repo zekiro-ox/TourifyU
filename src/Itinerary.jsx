@@ -6,6 +6,7 @@ import {
   setDoc,
   getDocs,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore"; // Import Firestore functions
 import Navbar from "./Nav"; // Reuse the Navbar component
 
@@ -19,6 +20,8 @@ const ItineraryPlan = () => {
   const [departureDate, setDepartureDate] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
   const [departureTime, setDepartureTime] = useState(""); // New state for departure time
+  const [editMode, setEditMode] = useState(false); // State to track if we are editing
+  const [currentItineraryId, setCurrentItineraryId] = useState(null); // State to hold the ID of the itinerary being edited
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -72,28 +75,75 @@ const ItineraryPlan = () => {
       activities,
     };
 
-    // Save itinerary to Firestore
     const user = auth.currentUser; // Get the current user
     if (user) {
       const userId = user.uid; // Get the user's UID
-      const userDocRef = doc(db, "itinerary", userId); // Reference to the user's document
-      const activitiesCollectionRef = collection(userDocRef, "Activity"); // Reference to the sub-collection
+      const activitiesCollectionRef = collection(
+        db,
+        "itinerary",
+        userId,
+        "Activity"
+      ); // Reference to the user's sub-collection
 
-      // Save the itinerary data in the sub-collection
-      await setDoc(doc(activitiesCollectionRef), itineraryData);
+      if (editMode) {
+        // Update existing itinerary
+        await setDoc(
+          doc(activitiesCollectionRef, currentItineraryId),
+          itineraryData
+        );
+        // Update local state
+        setItinerary((prevItinerary) =>
+          prevItinerary.map((item) =>
+            item.id === currentItineraryId
+              ? { ...item, ...itineraryData }
+              : item
+          )
+        );
+        setEditMode(false); // Reset edit mode
+        setCurrentItineraryId(null); // Reset current itinerary ID
+      } else {
+        // Save new itinerary
+        const docRef = await addDoc(activitiesCollectionRef, itineraryData);
+        // Update local state with the new itinerary including the generated ID
+        setItinerary((prevItinerary) => [
+          ...prevItinerary,
+          { id: docRef.id, ...itineraryData },
+        ]);
+      }
 
-      // Update local state
-      setItinerary([...itinerary, itineraryData]);
-      setDay(day + 1); // Move to the next day
-      setActivities([]); // Reset activities for the new day
-      setDestination("");
-      setTimeOfDay("Morning");
-      setDepartureDate("");
-      setArrivalDate("");
-      setDepartureTime(""); // Reset departure time
+      // Reset form fields
+      resetForm();
     } else {
       console.error("User  is not authenticated");
     }
+  };
+
+  const resetForm = () => {
+    setDay(1); // Reset day to 1
+    setActivities([]); // Clear activities
+    setDestination(""); // Clear destination
+    setTimeOfDay("Morning"); // Reset time of day
+    setDepartureDate(""); // Clear departure date
+    setArrivalDate(""); // Clear arrival date
+    setDepartureTime(""); // Clear departure time
+    setEditMode(false); // Exit edit mode
+    setCurrentItineraryId(null); // Clear current itinerary ID
+  };
+
+  const editItinerary = (plan) => {
+    setEditMode(true); // Set edit mode to true
+    setCurrentItineraryId(plan.id); // Set the ID of the itinerary being edited
+    setDay(plan.day); // Populate the day
+    setDestination(plan.destination); // Populate the destination
+    setTimeOfDay(plan.timeOfDay); // Populate the time of day
+    setDepartureDate(plan.departureDate); // Populate the departure date
+    setArrivalDate(plan.arrivalDate); // Populate the arrival date
+    setDepartureTime(plan.departureTime); // Populate the departure time
+    setActivities(plan.activities); // Populate the activities
+  };
+
+  const cancelEdit = () => {
+    resetForm(); // Reset the form to exit edit mode
   };
 
   const deleteItinerary = async () => {
@@ -139,7 +189,7 @@ const ItineraryPlan = () => {
       <Navbar /> {/* Reuse the Navbar component */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen pt-20">
         <div className="max-w-4xl w-full bg-white bg-opacity-50 rounded-lg shadow-lg py-8 px-6 mt-10 mx-4">
-          <h1 className="text-3xl text -center mb-6 font-bold text-gray-800">
+          <h1 className="text-3xl text-center mb-6 font-bold text-gray-800">
             Itinerary Plan
           </h1>
 
@@ -218,7 +268,7 @@ const ItineraryPlan = () => {
                 onChange={(e) => setNewActivity(e.target.value)}
               />
               <button
-                className=" bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
+                className="bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
                 onClick={addActivity}
               >
                 Add Activity
@@ -234,12 +284,22 @@ const ItineraryPlan = () => {
               ))}
             </ul>
 
-            <button
-              className="mt-6 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow"
-              onClick={saveItinerary}
-            >
-              Save Day {day} Itinerary
-            </button>
+            <div className="flex justify-between mt-6">
+              <button
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow"
+                onClick={saveItinerary}
+              >
+                {editMode ? "Update Itinerary" : `Save Day ${day} Itinerary`}
+              </button>
+              {editMode && (
+                <button
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow"
+                  onClick={cancelEdit}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Display Planned Itinerary */}
@@ -267,7 +327,7 @@ const ItineraryPlan = () => {
                     <p className="text-sm text-gray-700">
                       Time of Day: {plan.timeOfDay}
                     </p>
-                    <p className=" text-sm text-gray-700">
+                    <p className="text-sm text-gray-700">
                       Departure: {plan.departureDate} at {plan.departureTime}
                     </p>
                     <p className="text-sm text-gray-700">
@@ -280,6 +340,12 @@ const ItineraryPlan = () => {
                         </li>
                       ))}
                     </ul>
+                    <button
+                      className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow"
+                      onClick={() => editItinerary(plan)}
+                    >
+                      Edit
+                    </button>
                   </div>
                 ))}
               </div>
