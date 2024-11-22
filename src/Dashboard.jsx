@@ -240,9 +240,20 @@ const Dashboard = () => {
                     <h3 className="text-xl font-bold">{destination.name}</h3>
                   </div>
                   {hoveredIndex === index && (
-                    <div className="absolute inset-0 bg-black bg-opacity-75 text-white p-4 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black bg-opacity-75 text-white p-4 flex flex-col items-center justify-center">
                       <p className="text-center font-semibold cursor-pointer">
                         Click for destination details
+                      </p>
+                      <p className="text-center text-xs text-gray-500 mt-2">
+                        Image Source:{" "}
+                        <a
+                          href={destination.image}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline text-blue-600"
+                        >
+                          {destination.image}
+                        </a>
                       </p>
                     </div>
                   )}
@@ -280,6 +291,17 @@ const Dashboard = () => {
                     alt={spot.label}
                     className="w-full h-80 object-cover rounded-lg"
                   />
+                  <p className="text-center text-xs text-gray-500 mt-2">
+                    Image Source:{" "}
+                    <a
+                      href={spot.image}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline text-blue-600"
+                    >
+                      {spot.image}
+                    </a>
+                  </p>
                   <p className="text-center font-semibold mt-2">{spot.label}</p>
                   <p className="text-center text-gray-600 mt-1">
                     {spot.description}
