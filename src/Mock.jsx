@@ -340,14 +340,27 @@ const Mock = () => {
             ) : (
               <>
                 {/* Current Question Content */}
-                <p className="text-lg mb-6">
+                <p className="text-lg font-semibold text-gray-800 mb-4 text-center">
                   {questions[currentQuestionIndex].question}
                 </p>
-                <img
-                  src={questions[currentQuestionIndex].image}
-                  alt="Tourist Spot"
-                  className="fixed-image mb-4 rounded-lg" // Apply the fixed-image class
-                />
+                <div className="relative mb-4">
+                  <img
+                    src={questions[currentQuestionIndex].image}
+                    alt="Tourist Spot"
+                    className="fixed-image rounded-lg object-cover shadow-md transition-transform transform hover:scale-105 w-full h-auto max-w-full mx-auto"
+                  />
+                </div>
+                <p className="text-center text-sm text-gray-500 mb-4">
+                  Image Source:{" "}
+                  <a
+                    href={questions[currentQuestionIndex].image}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline text-blue-600 hover:text-blue-800"
+                  >
+                    {questions[currentQuestionIndex].image}
+                  </a>
+                </p>
 
                 <div className="space-y-4">
                   <div>
