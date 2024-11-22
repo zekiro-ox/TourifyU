@@ -7,12 +7,11 @@ import jsPDF from "jspdf";
 import QRCodeStyling from "qr-code-styling";
 
 const flightsData = [
-  // One-way flights
   {
     id: 1001,
     from: "Manila",
     to: "Cebu",
-    departDate: "2024-10-28",
+    departDate: "2024-12-01",
     airline: "Cebu Pacific",
     price: "₱1000",
     tripType: "one-way",
@@ -21,7 +20,7 @@ const flightsData = [
     id: 1002,
     from: "Manila",
     to: "Bohol",
-    departDate: "2024-10-29",
+    departDate: "2024-12-02",
     airline: "Philippine Airlines",
     price: "₱1500",
     tripType: "one-way",
@@ -30,7 +29,7 @@ const flightsData = [
     id: 1003,
     from: "Cebu",
     to: "Boracay",
-    departDate: "2024-10-30",
+    departDate: "2024-12-03",
     airline: "Air Asia",
     price: "₱1200",
     tripType: "one-way",
@@ -62,32 +61,40 @@ const flightsData = [
     price: "₱1400",
     tripType: "one-way",
   },
-  // Additional one-way flights
   {
-    id: 1009,
+    id: 1015,
     from: "Manila",
-    to: "Palawan",
-    departDate: "2024-10-31",
-    airline: "Air Asia",
-    price: "₱1600",
-    tripType: "one-way",
-  },
-  {
-    id: 1010,
-    from: "Boracay",
-    to: "Manila",
-    departDate: "2024-12-10",
+    to: "Boracay",
+    departDate: "2024-12-08",
     airline: "Cebu Pacific",
-    price: "₱1250",
+    price: "₱1150",
     tripType: "one-way",
   },
   {
-    id: 1011,
-    from: "Bohol",
+    id: 1016,
+    from: "Palawan",
     to: "Cebu",
+    departDate: "2024-12-12",
+    airline: "Air Asia",
+    price: "₱1450",
+    tripType: "one-way",
+  },
+  {
+    id: 1017,
+    from: "Davao",
+    to: "Boracay",
     departDate: "2024-12-15",
     airline: "Philippine Airlines",
-    price: "₱1700",
+    price: "₱1550",
+    tripType: "one-way",
+  },
+  {
+    id: 1018,
+    from: "Bohol",
+    to: "Manila",
+    departDate: "2024-12-20",
+    airline: "Cebu Pacific",
+    price: "₱1300",
     tripType: "one-way",
   },
   // Round-trip flights
@@ -95,8 +102,8 @@ const flightsData = [
     id: 1007,
     from: "Manila",
     to: "Bohol",
-    departDate: "2024-10-28",
-    returnDate: "2024-11-04",
+    departDate: "2024-12-02",
+    returnDate: "2024-12-09",
     airline: "Air Asia",
     price: "₱3000",
     tripType: "round-trip",
@@ -105,8 +112,8 @@ const flightsData = [
     id: 1008,
     from: "Cebu",
     to: "Davao",
-    departDate: "2024-10-29",
-    returnDate: "2024-11-06",
+    departDate: "2024-12-03",
+    returnDate: "2024-12-10",
     airline: "Philippine Airlines",
     price: "₱2500",
     tripType: "round-trip",
@@ -141,9 +148,63 @@ const flightsData = [
     price: "₱2900",
     tripType: "round-trip",
   },
+  {
+    id: 1019,
+    from: "Manila",
+    to: "Boracay",
+    departDate: "2024-12-05",
+    returnDate: "2024-12-12",
+    airline: "Cebu Pacific",
+    price: "₱3100",
+    tripType: "round-trip",
+  },
+  {
+    id: 1020,
+    from: "Bohol",
+    to: "Palawan",
+    departDate: "2024-12-06",
+    returnDate: "2024-12-13",
+    airline: "Philippine Airlines",
+    price: "₱3400",
+    tripType: "round-trip",
+  },
+  {
+    id: 1021,
+    from: "Davao",
+    to: "Boracay",
+    departDate: "2024-12-10",
+    returnDate: "2024-12-17",
+    airline: "Air Asia",
+    price: "₱3200",
+    tripType: "round-trip",
+  },
+  {
+    id: 1022,
+    from: "Cebu",
+    to: "Manila",
+    departDate: "2024-12-18",
+    returnDate: "2024-12-24",
+    airline: "Cebu Pacific",
+    price: "₱3000",
+    tripType: "round-trip",
+  },
+  {
+    id: 1023,
+    from: "Manila",
+    to: "Cebu",
+    departDate: "2024-12-20",
+    returnDate: "2024-12-27",
+    airline: "Philippine Airlines",
+    price: "₱3300",
+    tripType: "round-trip",
+  },
 ];
 
 const Book = () => {
+  const [promoCode, setPromoCode] = useState("");
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [enteredPromo, setEnteredPromo] = useState("");
+  const [currentDiscount, setCurrentDiscount] = useState(0);
   const [tripType, setTripType] = useState("one-way");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -160,6 +221,63 @@ const Book = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const ticketRef = useRef(null);
+  const [minDate, setMinDate] = useState("");
+  // This runs once when the component mounts
+
+  const generateRandomDiscount = () => {
+    return Math.floor(Math.random() * (50 - 10 + 1)) + 10; // Random discount between 10% and 50%
+  };
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`; // Returns date in YYYY-MM-DD format
+  };
+
+  const applyPromoCode = () => {
+    if (enteredPromo === promoCode) {
+      setDiscountApplied(true);
+      const discount = (totalPrice * currentDiscount) / 100; // Use the generated random discount
+      setTotalPrice((prevTotal) => prevTotal - discount);
+      alert(`Promo code applied! ${currentDiscount}% discount has been added.`);
+    } else {
+      alert("Invalid promo code. Please try again.");
+    }
+  };
+  const generateRandomPromoCode = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+    const length = 8; // Length of the promo code
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return result;
+  };
+
+  useEffect(() => {
+    setMinDate(getCurrentDate());
+  }, []);
+
+  // useEffect to set an initial promo code
+  useEffect(() => {
+    const initialPromoCode = generateRandomPromoCode();
+    setPromoCode(initialPromoCode);
+  }, []); // This runs only once when the component mounts
+
+  // Function to handle promo code regeneration
+  const handleGeneratePromoCode = () => {
+    const newPromoCode = generateRandomPromoCode();
+    const randomDiscount = generateRandomDiscount();
+    setPromoCode(newPromoCode);
+    setCurrentDiscount(randomDiscount); // Set current discount to the new random discount
+    setDiscountApplied(false); // Reset any previous discount state
+    alert(
+      `New promo code generated: ${newPromoCode} with a ${randomDiscount}% discount.`
+    );
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -181,15 +299,29 @@ const Book = () => {
 
   const handleBookNow = (flight) => {
     setSelectedFlight(flight);
-    setTotalPrice(parseFloat(flight.price.replace("₱", "")) * numPassengers);
+    const calculatedPrice =
+      parseFloat(flight.price.replace("₱", "")) * numPassengers;
+    setTotalPrice(calculatedPrice);
   };
-
   const handleBookingSubmit = (e) => {
     e.preventDefault();
     if (selectedFlight && numPassengers) {
-      setTotalPrice(
-        parseFloat(selectedFlight.price.replace("₱", "")) * numPassengers
-      );
+      // Calculate base price without promo code
+      const calculatedPrice =
+        parseFloat(selectedFlight.price.replace("₱", "")) * numPassengers;
+
+      let finalPrice = calculatedPrice;
+
+      // Apply the discount if valid promo code entered
+      if (enteredPromo === promoCode) {
+        const discount = (calculatedPrice * currentDiscount) / 100; // Apply the current discount
+        finalPrice = calculatedPrice - discount;
+        alert(
+          `Promo code applied! ${currentDiscount}% discount has been added.`
+        );
+      }
+
+      setTotalPrice(finalPrice);
       setShowBookingForm(false);
       setShowPaymentForm(true);
     } else {
@@ -284,6 +416,7 @@ const Book = () => {
                 <h2 className="text-xl font-bold text-gray-800 mb-6">
                   Flights
                 </h2>
+
                 <form onSubmit={handleSearch} className="space-y-4">
                   {/* Trip Type Selection */}
                   <div>
@@ -384,6 +517,7 @@ const Book = () => {
                         id="departDate"
                         name="departDate"
                         value={departDate}
+                        min={minDate} // Set the minimum date for departure
                         onChange={(e) => setDepartDate(e.target.value)}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                       />
@@ -403,6 +537,7 @@ const Book = () => {
                           id="returnDate"
                           name="returnDate"
                           value={returnDate}
+                          min={departDate || minDate} // Set the minimum date for return as the selected departDate or today
                           onChange={(e) => setReturnDate(e.target.value)}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                         />
@@ -464,6 +599,26 @@ const Book = () => {
                 <h2 className="text-xl font-bold text-gray-800 mb-6">
                   Booking Form
                 </h2>
+                <div>
+                  <label htmlFor="promoCode">
+                    Enter Promo Code (optional):
+                  </label>
+                  <input
+                    type="text"
+                    id="promoCode"
+                    value={enteredPromo}
+                    onChange={(e) => setEnteredPromo(e.target.value)}
+                  />
+                  <p>
+                    Your promo code: <strong>{promoCode}</strong>
+                  </p>
+                  <button
+                    onClick={handleGeneratePromoCode}
+                    className="mt-2 bg-sky-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Generate New Promo Code
+                  </button>
+                </div>
 
                 <form onSubmit={handleBookingSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">

@@ -188,7 +188,7 @@ const ItineraryPlan = () => {
       {/* Semi-transparent overlay */}
       <Navbar /> {/* Reuse the Navbar component */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen pt-20">
-        <div className="max-w-4xl w-full bg-white bg-opacity-50 rounded-lg shadow-lg py-8 px-6 mt-10 mx-4">
+        <div className="max-w-4xl w-full bg-gray-400 rounded-lg shadow-lg py-8 px-6 mt-10 mx-4">
           <h1 className="text-3xl text-center mb-6 font-bold text-gray-800">
             Itinerary Plan
           </h1>
