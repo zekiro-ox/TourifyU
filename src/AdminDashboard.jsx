@@ -25,6 +25,16 @@ const AdminDashboard = () => {
   ]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingDestinationId, setEditingDestinationId] = useState(null);
+  const [question, setQuestion] = useState({
+    question: "",
+    options: [
+      { value: "", label: "", isCorrect: false },
+      { value: "", label: "", isCorrect: false },
+      { value: "", label: "", isCorrect: false },
+      { value: "", label: "", isCorrect: false },
+    ],
+    image: "",
+  });
   const navigate = useNavigate();
   const db = getFirestore();
 
@@ -135,6 +145,47 @@ const AdminDashboard = () => {
     const updatedSpots = touristSpots.filter((_, i) => i !== index);
     setTouristSpots(updatedSpots);
     setNewDestination((prev) => ({ ...prev, touristSpots: updatedSpots }));
+  };
+  const handleQuestionChange = (field, value) => {
+    setQuestion((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleOptionChange = (optionIndex, field, value) => {
+    const updatedOptions = question.options.map((opt, j) => {
+      if (j === optionIndex) {
+        const updatedOption = { ...opt, [field]: value };
+        if (field === "label") {
+          // Automatically set the value to be the lowercase version of the label
+          updatedOption.value = value.toLowerCase();
+        }
+        return updatedOption;
+      }
+      return opt;
+    });
+    setQuestion((prev) => ({ ...prev, options: updatedOptions }));
+  };
+
+  const handleAssessmentSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Save question to Firestore
+      const questionsCollection = collection(db, "questionsCollection");
+      await addDoc(questionsCollection, question);
+      alert("Question added successfully!");
+      // Reset question form after submission
+      setQuestion({
+        question: "",
+        options: [
+          { value: "", label: "", isCorrect: false },
+          { value: "", label: "", isCorrect: false },
+          { value: "", label: "", isCorrect: false },
+          { value: "", label: "", isCorrect: false },
+        ],
+        image: "",
+      });
+    } catch (error) {
+      console.error("Error saving question:", error);
+    }
   };
 
   const renderContent = () => {
@@ -274,9 +325,69 @@ const AdminDashboard = () => {
         </div>
       );
     }
-
     if (activeTab === "Assessment") {
-      return <div>Assessment Content Here</div>;
+      return (
+        <div>
+          <h2 className="text-lg font-bold">Add Mock Question</h2>
+          <form onSubmit={handleAssessmentSubmit} className="space-y-4">
+            <div>
+              <label className="block font-semibold">Question:</label>
+              <input
+                type="text"
+                value={question.question}
+                onChange={(e) =>
+                  handleQuestionChange("question", e.target.value)
+                }
+                className="w-full px-3 py-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-semibold">Options:</label>
+              {question.options.map((option, optionIndex) => (
+                <div key={optionIndex} className="flex items-center mb-2">
+                  <input
+                    type="text"
+                    value={option.label}
+                    onChange={(e) =>
+                      handleOptionChange(optionIndex, "label", e.target.value)
+                    }
+                    className="w-1/2 px-3 py-2 border rounded mr-2"
+                    required
+                  />
+                  <input
+                    type="checkbox"
+                    checked={option.isCorrect}
+                    onChange={(e) =>
+                      handleOptionChange(
+                        optionIndex,
+                        "isCorrect",
+                        e.target.checked
+                      )
+                    }
+                  />
+                  <span className="ml-2">Correct</span>
+                </div>
+              ))}
+            </div>
+            <div>
+              <label className="block font-semibold">Image Link:</label>
+              <input
+                type="url"
+                value={question.image}
+                onChange={(e) => handleQuestionChange("image", e.target.value)}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+            >
+              Submit Question
+            </button>
+          </form>
+        </div>
+      );
     }
 
     return null;
