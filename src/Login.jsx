@@ -7,7 +7,16 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "./config/firebase"; // Adjust the path based on your directory structure
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore"; // Firestore imports
 import logo from "./assets/mainlogo.png"; // Adjust the path as necessary
+
+const db = getFirestore(); // Firestore initialization
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +28,6 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Load remembered email and password from localStorage
     const rememberedEmail = localStorage.getItem("rememberedEmail");
     const rememberedPassword = localStorage.getItem("rememberedPassword");
     if (rememberedEmail && rememberedPassword) {
@@ -37,19 +45,34 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Check if the user's UID exists in the admins collection
+      const adminDocRef = collection(db, "admins");
+      const adminDocSnapshot = await getDocs(
+        query(adminDocRef, where("__name__", "==", user.uid))
+      ); // Query by document ID
+
+      if (!adminDocSnapshot.empty) {
+        // Redirect to admin dashboard
+        navigate("/admin-dashboard");
+      } else {
+        // Redirect to user dashboard
+        navigate("/dashboard");
+      }
 
       if (rememberMe) {
-        // Save email and password to localStorage if "Remember me" is checked
         localStorage.setItem("rememberedEmail", email);
         localStorage.setItem("rememberedPassword", password);
       } else {
-        // Clear localStorage if "Remember me" is unchecked
         localStorage.removeItem("rememberedEmail");
         localStorage.removeItem("rememberedPassword");
       }
-
-      navigate("/dashboard"); // Redirect to home page after successful login
     } catch (error) {
       setError(error.message);
     }

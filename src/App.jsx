@@ -8,6 +8,7 @@ import Safety from "./Safety";
 import Spiel from "./Spiel";
 import ItineraryPlan from "./Itinerary";
 import Mock from "./Mock";
+import AdminDashboard from "./AdminDashboard";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/spiel" element={<Spiel />} />
         <Route path="/itinerary-plan" element={<ItineraryPlan />} />
         <Route path="/mock" element={<Mock />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
