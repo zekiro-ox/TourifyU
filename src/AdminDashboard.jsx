@@ -35,6 +35,7 @@ const AdminDashboard = () => {
     ],
     image: "",
   });
+  const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
   const db = getFirestore();
 
@@ -53,6 +54,16 @@ const AdminDashboard = () => {
         }));
 
         setDestinationData(fetchedDestinations);
+        // Fetch Questions data
+        const questionSnapshot = await getDocs(
+          collection(db, "questionsCollection")
+        );
+        const fetchedQuestions = questionSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setQuestions(fetchedQuestions);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -165,14 +176,59 @@ const AdminDashboard = () => {
     setQuestion((prev) => ({ ...prev, options: updatedOptions }));
   };
 
+  const handleEditQuestion = (item) => {
+    setIsEditMode(true);
+    setEditingDestinationId(item.id); // Use this for the question as well
+    setQuestion(item);
+  };
+
+  const handleCancel = () => {
+    setIsEditMode(false); // Exit edit mode
+    setEditingDestinationId(null); // Clear the editing destination ID
+
+    // Reset forms based on the active tab
+    if (activeTab === "Destination") {
+      setNewDestination({ name: "", image: "", touristSpots: [] });
+      setTouristSpots([{ name: "", image: "", details: "" }]);
+    } else if (activeTab === "Assessment") {
+      setQuestion({
+        question: "",
+        options: [
+          { value: "", label: "", isCorrect: false },
+          { value: "", label: "", isCorrect: false },
+          { value: "", label: "", isCorrect: false },
+          { value: "", label: "", isCorrect: false },
+        ],
+        image: "",
+      });
+    }
+  };
+
   const handleAssessmentSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Save question to Firestore
-      const questionsCollection = collection(db, "questionsCollection");
-      await addDoc(questionsCollection, question);
-      alert("Question added successfully!");
-      // Reset question form after submission
+      if (isEditMode) {
+        const questionRef = doc(
+          db,
+          "questionsCollection",
+          editingDestinationId
+        );
+        await updateDoc(questionRef, question);
+
+        setQuestions((prev) =>
+          prev.map((q) => (q.id === editingDestinationId ? question : q))
+        );
+        alert("Question updated successfully!");
+      } else {
+        const questionsCollection = collection(db, "questionsCollection");
+        const docRef = await addDoc(questionsCollection, question);
+
+        setQuestions([...questions, { id: docRef.id, ...question }]);
+        alert("Question added successfully!");
+      }
+
+      setIsEditMode(false);
+      setEditingDestinationId(null);
       setQuestion({
         question: "",
         options: [
@@ -303,6 +359,13 @@ const AdminDashboard = () => {
             >
               {isEditMode ? "Update Destination" : "Submit Destination"}
             </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="bg-gray-500 text-white px-4 py-2 rounded mt-4 ml-4 hover:bg-gray-600"
+            >
+              Cancel
+            </button>
           </form>
 
           {/* Display Existing Destinations */}
@@ -328,7 +391,9 @@ const AdminDashboard = () => {
     if (activeTab === "Assessment") {
       return (
         <div>
-          <h2 className="text-lg font-bold">Add Mock Question</h2>
+          <h2 className="text-lg font-bold">
+            {isEditMode ? "Edit" : "Add"} Mock Question
+          </h2>
           <form onSubmit={handleAssessmentSubmit} className="space-y-4">
             <div>
               <label className="block font-semibold">Question:</label>
@@ -383,9 +448,34 @@ const AdminDashboard = () => {
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
             >
-              Submit Question
+              {isEditMode ? "Update Question" : "Submit Question"}
+            </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="bg-gray-500 text-white px-4 py-2 rounded mt-4 ml-4 hover:bg-gray-600"
+            >
+              Cancel
             </button>
           </form>
+
+          {/* Display Existing Questions */}
+          <div className="mt-6">
+            <h2 className="text-lg font-bold">Existing Questions:</h2>
+            <ul>
+              {questions.map((item) => (
+                <li key={item.id} className="border-b py-2">
+                  <p>{item.question}</p>
+                  <button
+                    onClick={() => handleEditQuestion(item)}
+                    className="text-blue-500 hover:text-blue-700 ml-4"
+                  >
+                    Edit
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       );
     }
