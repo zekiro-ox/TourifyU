@@ -9,6 +9,7 @@ import {
   addDoc,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const AdminDashboard = () => {
@@ -139,6 +140,26 @@ const AdminDashboard = () => {
     });
     setTouristSpots(destination.touristSpots); // Load tourist spots for editing
   };
+  const handleDeleteDestination = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this destination? This action cannot be undone."
+    );
+
+    if (!confirmDelete) return; // Exit if user cancels
+
+    try {
+      const destinationRef = doc(db, "destinationCollection", id);
+      await deleteDoc(destinationRef);
+
+      // Update state to remove the deleted destination
+      setDestinationData((prevData) =>
+        prevData.filter((destination) => destination.id !== id)
+      );
+      alert("Destination deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting destination:", error);
+    }
+  };
 
   const handleAddTouristSpot = () => {
     setTouristSpots([...touristSpots, { name: "", image: "", details: "" }]);
@@ -180,6 +201,25 @@ const AdminDashboard = () => {
     setIsEditMode(true);
     setEditingDestinationId(item.id); // Use this for the question as well
     setQuestion(item);
+  };
+
+  const handleDeleteQuestion = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this question? This action cannot be undone."
+    );
+
+    if (!confirmDelete) return; // Exit if user cancels
+
+    try {
+      const questionRef = doc(db, "questionsCollection", id);
+      await deleteDoc(questionRef);
+
+      // Update state to remove the deleted question
+      setQuestions((prev) => prev.filter((question) => question.id !== id));
+      alert("Question deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting question:", error);
+    }
   };
 
   const handleCancel = () => {
@@ -373,14 +413,27 @@ const AdminDashboard = () => {
             <h2 className="text-lg font-bold">Existing Destinations:</h2>
             <ul>
               {destinationData.map((item) => (
-                <li key={item.id} className="border-b py-2">
-                  {item.name} ({item.touristSpots.length} Tourist Spots)
-                  <button
-                    onClick={() => handleEditDestination(item)}
-                    className="text-blue-500 hover:text-blue-700 ml-4"
-                  >
-                    Edit
-                  </button>
+                <li
+                  key={item.id}
+                  className="border-b py-2 flex justify-between"
+                >
+                  <span>
+                    {item.name} ({item.touristSpots.length} Tourist Spots)
+                  </span>
+                  <div>
+                    <button
+                      onClick={() => handleEditDestination(item)}
+                      className="text-blue-500 hover:text-blue-700 mr-4"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteDestination(item.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -464,14 +517,25 @@ const AdminDashboard = () => {
             <h2 className="text-lg font-bold">Existing Questions:</h2>
             <ul>
               {questions.map((item) => (
-                <li key={item.id} className="border-b py-2">
-                  <p>{item.question}</p>
-                  <button
-                    onClick={() => handleEditQuestion(item)}
-                    className="text-blue-500 hover:text-blue-700 ml-4"
-                  >
-                    Edit
-                  </button>
+                <li
+                  key={item.id}
+                  className="border-b py-2 flex justify-between"
+                >
+                  <span>{item.question}</span>
+                  <div>
+                    <button
+                      onClick={() => handleEditQuestion(item)}
+                      className="text-blue-500 hover:text-blue-700 mr-4"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteQuestion(item.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
