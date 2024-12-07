@@ -11,7 +11,7 @@ const flightsData = [
     id: 1001,
     from: "Manila",
     to: "Cebu",
-    departDate: "2024-12-01",
+    departDate: "2024-12-07",
     airline: "Cebu Pacific",
     price: "₱1000",
     tripType: "one-way",

@@ -143,26 +143,23 @@ const Safety = () => {
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative flex flex-col items-center justify-center min-h-screen pt-24 px-4">
-          <div className="max-w-screen-sm mx-auto px-4 py-8 bg-opacity-70 rounded-lg shadow-2xl">
-            <h2 className="text-2xl font-bold text-white mb-6 md:text-3xl lg:text-4xl text-center">
+          <div className="max-w-screen-sm w-full mx-auto px-4 py-8 bg-opacity-50 bg-gray-50 rounded-lg shadow-2xl">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 md:text-3xl text-center">
               Safety Procedure
             </h2>
-            <p className="text-white mb-8 text-sm md:text-base lg:text-lg text-center">
-              Ensure that you follow all safety guidelines when traveling. This
-              includes wearing your seatbelt, following the crew's instructions,
-              and securing your belongings.
+            <p className="text-gray-900 mb-6 text-sm md:text-base text-center">
+              Ensure that you follow all safety guidelines when traveling.
             </p>
 
             {/* Carousel */}
             <div className="w-full overflow-hidden">
               <Slider {...settings}>
                 {airlineImages.map((airline, index) => (
-                  <div key={index} className="w-full flex justify-center">
+                  <div key={index} className="flex justify-center items-center">
                     <img
                       src={airline.src}
                       alt={airline.alt}
-                      className="w-full h-48 object-cover md:h-64 lg:h-80 rounded-lg"
-                      style={{ maxWidth: "100%" }}
+                      className="w-full max-h-48 md:max-h-64 object-cover rounded-lg"
                     />
                   </div>
                 ))}
@@ -170,9 +167,11 @@ const Safety = () => {
             </div>
 
             {/* Display the safety procedure */}
-            <div className="mt-8 px-4 py-6 bg-opacity-70 rounded-lg bg-white shadow-md">
-              <h3 className="text-2xl font-bold mb-4">Safety Information:</h3>
-              <div className="text-gray-700">
+            <div className="mt-8 px-4 py-6 bg-white bg-opacity-90 rounded-lg shadow-md">
+              <h3 className="text-xl font-bold mb-4 text-gray-800">
+                Safety Information:
+              </h3>
+              <div className="text-gray-700 text-sm md:text-base">
                 {formatProcedure(currentProcedure)}
               </div>
             </div>
