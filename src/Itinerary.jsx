@@ -21,7 +21,20 @@ const ItineraryPlan = () => {
   const [arrivalDate, setArrivalDate] = useState("");
   const [departureTime, setDepartureTime] = useState(""); // New state for departure time
   const [editMode, setEditMode] = useState(false); // State to track if we are editing
-  const [currentItineraryId, setCurrentItineraryId] = useState(null); // State to hold the ID of the itinerary being edited
+  const [currentItineraryId, setCurrentItineraryId] = useState(null);
+  const [selectedActivity, setSelectedActivity] = useState(""); // State for selected activity
+
+  const predefinedActivities = [
+    "Sightseeing",
+    "Hiking",
+    "Shopping",
+    "Dining",
+    "Beach",
+    "Museum Visit",
+    "Adventure Sports",
+    "Relaxation",
+    // Add more predefined activities as needed
+  ]; // State to hold the ID of the itinerary being edited
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -260,16 +273,37 @@ const ItineraryPlan = () => {
             {/* Activity */}
             <div className="mt-4">
               <label className="block text-gray-700">Activity</label>
+              <select
+                className="border px-4 py-2 rounded-lg w-full mb-3 shadow"
+                value={selectedActivity}
+                onChange={(e) => setSelectedActivity(e.target.value)}
+              >
+                <option value="">Select an activity</option>
+                {predefinedActivities.map((activity, index) => (
+                  <option key={index} value={activity}>
+                    {activity}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 className="border px-4 py-2 rounded-lg w-full mb-3 shadow"
-                placeholder="Enter activity"
+                placeholder="Or type your own activity"
                 value={newActivity}
                 onChange={(e) => setNewActivity(e.target.value)}
               />
               <button
                 className="bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
-                onClick={addActivity}
+                onClick={() => {
+                  // Add the selected activity or the custom activity to the activities list
+                  if (selectedActivity) {
+                    setActivities([...activities, selectedActivity]);
+                    setSelectedActivity(""); // Reset selected activity
+                  } else if (newActivity.trim() !== "") {
+                    setActivities([...activities, newActivity]);
+                    setNewActivity(""); // Reset new activity input
+                  }
+                }}
               >
                 Add Activity
               </button>

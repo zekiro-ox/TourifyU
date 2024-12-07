@@ -15,6 +15,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱1000",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1002,
@@ -24,6 +29,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱1500",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1003,
@@ -33,6 +43,11 @@ const flightsData = [
     airline: "Air Asia",
     price: "₱1200",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1004,
@@ -42,6 +57,11 @@ const flightsData = [
     airline: "Air Asia",
     price: "₱1300",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1005,
@@ -51,6 +71,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱1100",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1006,
@@ -60,6 +85,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱1400",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1015,
@@ -69,6 +99,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱1150",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1016,
@@ -78,6 +113,11 @@ const flightsData = [
     airline: "Air Asia",
     price: "₱1450",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1017,
@@ -87,6 +127,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱1550",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1018,
@@ -96,6 +141,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱1300",
     tripType: "one-way",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   // Round-trip flights
   {
@@ -107,6 +157,11 @@ const flightsData = [
     airline: "Air Asia",
     price: "₱3000",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1008,
@@ -117,6 +172,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱2500",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1012,
@@ -127,6 +187,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱3200",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1013,
@@ -137,6 +202,11 @@ const flightsData = [
     airline: "Air Asia",
     price: "₱2700",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1014,
@@ -147,6 +217,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱2900",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1019,
@@ -157,6 +232,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱3100",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1020,
@@ -167,6 +247,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱3400",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1021,
@@ -177,6 +262,11 @@ const flightsData = [
     airline: "Air Asia",
     price: "₱3200",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1022,
@@ -187,6 +277,11 @@ const flightsData = [
     airline: "Cebu Pacific",
     price: "₱3000",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
   {
     id: 1023,
@@ -197,6 +292,11 @@ const flightsData = [
     airline: "Philippine Airlines",
     price: "₱3300",
     tripType: "round-trip",
+    seats: {
+      Window: 10,
+      Aisle: 10,
+      Middle: 10,
+    },
   },
 ];
 
@@ -297,6 +397,14 @@ const Book = () => {
     setFilteredFlights(results);
   };
 
+  const formatCurrency = (value) => {
+    const number = parseFloat(value.replace("₱", "").replace(/,/g, ""));
+    return `₱${number.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
   const handleBookNow = (flight) => {
     setSelectedFlight(flight);
     const calculatedPrice =
@@ -306,6 +414,12 @@ const Book = () => {
   const handleBookingSubmit = (e) => {
     e.preventDefault();
     if (selectedFlight && numPassengers) {
+      // Check seat availability
+      if (selectedFlight.seats[seatPreference] < numPassengers) {
+        alert(`Not enough ${seatPreference} seats available.`);
+        return;
+      }
+
       // Calculate base price without promo code
       const calculatedPrice =
         parseFloat(selectedFlight.price.replace("₱", "")) * numPassengers;
@@ -324,6 +438,9 @@ const Book = () => {
       setTotalPrice(finalPrice);
       setShowBookingForm(false);
       setShowPaymentForm(true);
+
+      // Decrement the available seats
+      selectedFlight.seats[seatPreference] -= numPassengers;
     } else {
       console.error("Error: selectedFlight or numPassengers is null or empty");
     }
@@ -474,6 +591,8 @@ const Book = () => {
                         <option value="Manila">Manila</option>
                         <option value="Cebu">Cebu</option>
                         <option value="Davao">Davao</option>
+                        <option value="Bohol">Bohol</option>
+                        <option value="Boracay">Boracay</option>
                         {/* Add more options as needed */}
                       </select>
                     </div>
@@ -494,10 +613,11 @@ const Book = () => {
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                       >
                         <option value="">Select</option>
+                        <option value="Manila">Manila</option>
                         <option value="Cebu">Cebu</option>
+                        <option value="Davao">Davao</option>
                         <option value="Bohol">Bohol</option>
                         <option value="Boracay">Boracay</option>
-                        <option value="Davao">Davao</option>
                         {/* Add more options as needed */}
                       </select>
                     </div>
@@ -576,7 +696,16 @@ const Book = () => {
                             Airline: {flight.airline}
                           </p>
                           <p className="text-md font-bold text-gray-800">
-                            Price: {flight.price}
+                            Price: {formatCurrency(flight.price)}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Window Seats: {flight.seats.Window}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Aisle Seats: {flight.seats.Aisle}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Middle Seats: {flight.seats.Middle}
                           </p>
                           <button
                             onClick={() => handleBookNow(flight)}
@@ -730,7 +859,11 @@ const Book = () => {
                       Airline: {selectedFlight.airline}
                     </p>
                     <p className="text-md font-bold text-gray-800">
-                      Price: {selectedFlight.price}
+                      Price: {formatCurrency(selectedFlight.price)}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Remaining {seatPreference} Seats:{" "}
+                      {selectedFlight.seats[seatPreference]}
                     </p>
                   </div>
 
@@ -749,7 +882,7 @@ const Book = () => {
                 </h2>
                 <div className="mb-4">
                   <p className="text-md font-semibold text-gray-800">
-                    Total Price: ₱{totalPrice.toFixed(2)}
+                    Total Price: {formatCurrency(totalPrice.toFixed(2))}
                   </p>
                 </div>
 
@@ -786,7 +919,7 @@ const Book = () => {
                     )}
 
                     <p className="text-md font-semibold text-gray-800">
-                      Total Price: ₱{totalPrice.toFixed(2)}
+                      Total Price: {formatCurrency(totalPrice.toFixed(2))}
                     </p>
                   </div>
                   <QRCode
