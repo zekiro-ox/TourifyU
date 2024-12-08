@@ -300,6 +300,38 @@ const flightsData = [
   },
 ];
 
+const busData = [
+  {
+    id: 2001,
+    from: "Manila",
+    to: "Cebu",
+    departDate: "2024-12-10",
+    price: "₱500",
+    seats: {
+      Window: 20,
+      Aisle: 20,
+      Middle: 20,
+    },
+  },
+  // Add more bus data as needed
+];
+
+const boatData = [
+  {
+    id: 3001,
+    from: "Cebu",
+    to: "Bohol",
+    departDate: "2024-12-10",
+    price: "₱700",
+    seats: {
+      Window: 15,
+      Aisle: 15,
+      Middle: 15,
+    },
+  },
+  // Add more boat data as needed
+];
+
 const Book = () => {
   const [promoCode, setPromoCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -322,6 +354,10 @@ const Book = () => {
   const [lastName, setLastName] = useState("");
   const ticketRef = useRef(null);
   const [minDate, setMinDate] = useState("");
+  const [transportType, setTransportType] = useState("flights"); // Default to flights
+  const [filteredBuses, setFilteredBuses] = useState([]);
+  const [filteredBoats, setFilteredBoats] = useState([]);
+  const [selectedTransport, setSelectedTransport] = useState(null);
   // This runs once when the component mounts
 
   const generateRandomDiscount = () => {
@@ -382,19 +418,35 @@ const Book = () => {
   const handleSearch = (e) => {
     e.preventDefault();
 
-    let results = flightsData.filter(
-      (flight) =>
-        flight.from === from &&
-        flight.to === to &&
-        flight.departDate === departDate &&
-        flight.tripType === tripType
-    );
+    if (transportType === "flights") {
+      let results = flightsData.filter(
+        (flight) =>
+          flight.from === from &&
+          flight.to === to &&
+          flight.departDate === departDate &&
+          flight.tripType === tripType
+      );
 
-    if (tripType === "round-trip" && returnDate) {
-      results = results.filter((flight) => flight.returnDate === returnDate);
+      if (tripType === "round-trip" && returnDate) {
+        results = results.filter((flight) => flight.returnDate === returnDate);
+      }
+
+      setFilteredFlights(results);
+    } else if (transportType === "buses") {
+      let results = busData.filter(
+        (bus) =>
+          bus.from === from && bus.to === to && bus.departDate === departDate
+      );
+
+      setFilteredBuses(results);
+    } else if (transportType === "boats") {
+      let results = boatData.filter(
+        (boat) =>
+          boat.from === from && boat.to === to && boat.departDate === departDate
+      );
+
+      setFilteredBoats(results);
     }
-
-    setFilteredFlights(results);
   };
 
   const formatCurrency = (value) => {
@@ -405,24 +457,25 @@ const Book = () => {
     })}`;
   };
 
-  const handleBookNow = (flight) => {
-    setSelectedFlight(flight);
+  const handleBookNow = (transport) => {
+    setSelectedTransport(transport);
     const calculatedPrice =
-      parseFloat(flight.price.replace("₱", "")) * numPassengers;
+      parseFloat(transport.price.replace("₱", "")) * numPassengers;
     setTotalPrice(calculatedPrice);
   };
+
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    if (selectedFlight && numPassengers) {
+    if (selectedTransport && numPassengers) {
       // Check seat availability
-      if (selectedFlight.seats[seatPreference] < numPassengers) {
+      if (selectedTransport.seats[seatPreference] < numPassengers) {
         alert(`Not enough ${seatPreference} seats available.`);
         return;
       }
 
       // Calculate base price without promo code
       const calculatedPrice =
-        parseFloat(selectedFlight.price.replace("₱", "")) * numPassengers;
+        parseFloat(selectedTransport.price.replace("₱", "")) * numPassengers;
 
       let finalPrice = calculatedPrice;
 
@@ -440,12 +493,13 @@ const Book = () => {
       setShowPaymentForm(true);
 
       // Decrement the available seats
-      selectedFlight.seats[seatPreference] -= numPassengers;
+      selectedTransport.seats[seatPreference] -= numPassengers;
     } else {
-      console.error("Error: selectedFlight or numPassengers is null or empty");
+      console.error(
+        "Error: selectedTransport or numPassengers is null or empty"
+      );
     }
   };
-
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
     setShowPaymentForm(false);
@@ -528,13 +582,57 @@ const Book = () => {
         <div className="relative flex flex-col items-center justify-center min-h-screen pt-20">
           <div className="max-w-4xl mx-auto px-4 py-8 bg-white bg-opacity-50 rounded-lg shadow-lg">
             {/* Conditionally render the booking form or the flight search/results */}
-            {!selectedFlight ? (
+            {!selectedTransport ? (
               <>
-                <h2 className="text-xl font-bold text-gray-800 mb-6">
-                  Flights
-                </h2>
+                <h2 className="text-xl font-bold text-gray-800 mb-6">Book</h2>
 
                 <form onSubmit={handleSearch} className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="transportType"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Transport Type
+                    </label>
+                    <div className="mt-1 flex space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          id="flights"
+                          name="transportType"
+                          value="flights"
+                          checked={transportType === "flights"}
+                          onChange={() => setTransportType("flights")}
+                          className="mr-2"
+                        />
+                        Flights
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          id="buses"
+                          name="transportType"
+                          value="buses"
+                          checked={transportType === "buses"}
+                          onChange={() => setTransportType("buses")}
+                          className="mr-2"
+                        />
+                        Buses
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          id="boats"
+                          name="transportType"
+                          value="boats"
+                          checked={transportType === "boats"}
+                          onChange={() => setTransportType("boats")}
+                          className="mr-2"
+                        />
+                        Boats
+                      </label>
+                    </div>
+                  </div>
                   {/* Trip Type Selection */}
                   <div>
                     <label
@@ -669,10 +767,14 @@ const Book = () => {
                     type="submit"
                     className="w-full bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
                   >
-                    Search Flights
+                    Search{" "}
+                    {transportType.charAt(0).toUpperCase() +
+                      transportType.slice(1)}
                   </button>
                 </form>
-                {filteredFlights.length > 0 ? (
+
+                {/* Render Available Flights, Buses, or Boats */}
+                {transportType === "flights" && filteredFlights.length > 0 ? (
                   <div className="mt-8">
                     <h3 className="text-lg font-bold text-gray-800 mb-4">
                       Available Flights
@@ -717,9 +819,87 @@ const Book = () => {
                       ))}
                     </ul>
                   </div>
+                ) : transportType === "buses" && filteredBuses.length > 0 ? (
+                  <div className="mt-8">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4">
+                      Available Buses
+                    </h3>
+                    <ul className="space-y-4">
+                      {filteredBuses.map((bus) => (
+                        <li
+                          key={bus.id}
+                          className="border border-gray-300 rounded-md p-4"
+                        >
+                          <h4 className="text-md font-semibold text-gray-800">
+                            {bus.from} to {bus.to}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Date: {bus.departDate}
+                          </p>
+                          <p className="text-md font-bold text-gray-800">
+                            Price: {formatCurrency(bus.price)}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Window Seats: {bus.seats.Window}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Aisle Seats: {bus.seats.Aisle}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Middle Seats: {bus.seats.Middle}
+                          </p>
+                          <button
+                            onClick={() => handleBookNow(bus)}
+                            className="mt-2 bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
+                          >
+                            Book Now
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : transportType === "boats" && filteredBoats.length > 0 ? (
+                  <div className="mt-8">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4">
+                      Available Boats
+                    </h3>
+                    <ul className="space-y-4">
+                      {filteredBoats.map((boat) => (
+                        <li
+                          key={boat.id}
+                          className="border border-gray-300 rounded-md p-4"
+                        >
+                          <h4 className="text-md font-semibold text-gray-800">
+                            {boat.from} to {boat.to}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Date: {boat.departDate}
+                          </p>
+                          <p className="text-md font-bold text-gray-800">
+                            Price: {formatCurrency(boat.price)}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Window Seats: {boat.seats.Window}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Aisle Seats: {boat.seats.Aisle}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Remaining Middle Seats: {boat.seats.Middle}
+                          </p>
+                          <button
+                            onClick={() => handleBookNow(boat)}
+                            className="mt-2 bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
+                          >
+                            Book Now
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ) : (
                   <p className="mt-8 text-gray-600">
-                    No flights available for the selected criteria.
+                    No {transportType} available for the selected criteria.
                   </p>
                 )}
               </>
@@ -773,7 +953,7 @@ const Book = () => {
                         htmlFor="lastName"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Last Name{" "}
+                        Last Name
                       </label>
                       <input
                         type="text"
@@ -817,9 +997,25 @@ const Book = () => {
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                     >
                       <option value="">Select</option>
-                      <option value="Window">Window</option>
-                      <option value="Aisle">Aisle</option>
-                      <option value="Middle">Middle</option>
+                      {transportType === "flights" && (
+                        <>
+                          <option value="Window">Window</option>
+                          <option value="Aisle">Aisle</option>
+                          <option value="Middle">Middle</option>
+                        </>
+                      )}
+                      {transportType === "buses" && (
+                        <>
+                          <option value="Window">Window</option>
+                          <option value="Aisle">Aisle</option>
+                        </>
+                      )}
+                      {transportType === "boats" && (
+                        <>
+                          <option value="Window">Window</option>
+                          <option value="Aisle">Aisle</option>
+                        </>
+                      )}
                     </select>
                   </div>
 
@@ -841,29 +1037,33 @@ const Book = () => {
                     />
                   </div>
 
-                  {/* Display selected flight information */}
+                  {/* Display selected transport information */}
                   <div className="mt-4 p-4 border border-gray-300 rounded-md bg-gray-50">
                     <h4 className="text-md font-semibold text-gray-800">
-                      Selected Flight
+                      Selected{" "}
+                      {transportType.charAt(0).toUpperCase() +
+                        transportType.slice(1)}
                     </h4>
                     <p className="text-sm text-gray-600">
-                      {selectedFlight.from} to {selectedFlight.to}
+                      {selectedTransport.from} to {selectedTransport.to}
                     </p>
                     <p className="text-sm text-gray-600">
-                      Date: {selectedFlight.departDate}
-                      {selectedFlight.returnDate && (
-                        <> | Return Date: {selectedFlight.returnDate}</>
+                      Date: {selectedTransport.departDate}
+                      {selectedTransport.returnDate && (
+                        <> | Return Date: {selectedTransport.returnDate}</>
                       )}
                     </p>
                     <p className="text-sm text-gray-600">
-                      Airline: {selectedFlight.airline}
+                      {transportType === "flights"
+                        ? `Airline: ${selectedTransport.airline}`
+                        : ""}
                     </p>
                     <p className="text-md font-bold text-gray-800">
-                      Price: {formatCurrency(selectedFlight.price)}
+                      Price: {formatCurrency(selectedTransport.price)}
                     </p>
                     <p className="text-sm text-gray-600">
                       Remaining {seatPreference} Seats:{" "}
-                      {selectedFlight.seats[seatPreference]}
+                      {selectedTransport.seats[seatPreference]}
                     </p>
                   </div>
 
@@ -876,7 +1076,7 @@ const Book = () => {
                 </form>
               </>
             ) : showPaymentForm ? (
-              <div className=" p-6   max-w-md mx-auto mt-10">
+              <div className="p-6 max-w-md mx-auto mt-10">
                 <h2 className="text-xl font-bold text-gray-800 mb-6">
                   Payment Details
                 </h2>
@@ -904,20 +1104,19 @@ const Book = () => {
                       className="w-full h-60 mb-4 object-cover"
                     />
                     <p className="text-md font-semibold text-gray-800">
-                      Flight Number: {selectedFlight.id}
+                      Transport Number: {selectedTransport.id}
                     </p>
                     <p className="text-md font-semibold text-gray-800">
-                      From: {selectedFlight.from}
+                      From: {selectedTransport.from}
                     </p>
                     <p className="text-md font-semibold text-gray-800">
-                      To: {selectedFlight.to}
+                      To: {selectedTransport.to}
                     </p>
-                    {selectedFlight.returnDate && (
+                    {selectedTransport.returnDate && (
                       <p className="text-md font-semibold text-gray-800">
-                        Return Date: {selectedFlight.returnDate}
+                        Return Date: {selectedTransport.returnDate}
                       </p>
                     )}
-
                     <p className="text-md font-semibold text-gray-800">
                       Total Price: {formatCurrency(totalPrice.toFixed(2))}
                     </p>
