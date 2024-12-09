@@ -22,19 +22,17 @@ const ItineraryPlan = () => {
   const [departureTime, setDepartureTime] = useState(""); // New state for departure time
   const [editMode, setEditMode] = useState(false); // State to track if we are editing
   const [currentItineraryId, setCurrentItineraryId] = useState(null);
-  const [selectedActivity, setSelectedActivity] = useState(""); // State for selected activity
 
-  const predefinedActivities = [
-    "Sightseeing",
-    "Hiking",
-    "Shopping",
-    "Dining",
-    "Beach",
-    "Museum Visit",
-    "Adventure Sports",
-    "Relaxation",
-    // Add more predefined activities as needed
-  ]; // State to hold the ID of the itinerary being edited
+  // Mapping of destinations to activities
+  const destinationActivities = {
+    Manila: ["Sightseeing", "Shopping", "Dining"],
+    Cebu: ["Beach", "Snorkeling", "Cultural Tours"],
+    Davao: ["Hiking", "Adventure Sports", "Relaxation"],
+    Bohol: ["Beach", "Sightseeing", "Dolphin Watching"],
+    Boracay: ["Beach", "Water Sports", "Nightlife"],
+    Palawan: ["Island Hopping", "Snorkeling", "Diving"],
+    // Add more destinations and their activities as needed
+  };
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -60,7 +58,7 @@ const ItineraryPlan = () => {
           }
         });
 
-        setItinerary(fetchedItinerary); // Set the fetched itinerary to state
+        setItinerary(fetchedItinerary);
         setDay(maxDay + 1); // Set the day to maxDay + 1
       } else {
         console.error("User  is not authenticated");
@@ -69,13 +67,6 @@ const ItineraryPlan = () => {
 
     fetchItinerary(); // Call the fetch function
   }, []); // Empty dependency array to run only on mount
-
-  const addActivity = () => {
-    if (newActivity.trim() !== "") {
-      setActivities([...activities, newActivity]);
-      setNewActivity("");
-    }
-  };
 
   const saveItinerary = async () => {
     const itineraryData = {
@@ -189,6 +180,13 @@ const ItineraryPlan = () => {
     }
   };
 
+  // Update activities based on selected destination
+  const handleDestinationChange = (e) => {
+    const selectedDestination = e.target.value;
+    setDestination(selectedDestination);
+    setActivities([]); // Clear activities when destination changes
+  };
+
   return (
     <div
       className="relative min-h-screen bg-cover bg-center bg-fixed"
@@ -197,9 +195,8 @@ const ItineraryPlan = () => {
           "url('https://wallpapers.com/images/featured/airport-w6v47yjhxcohsjgf.jpg')",
       }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>{" "}
-      {/* Semi-transparent overlay */}
-      <Navbar /> {/* Reuse the Navbar component */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <Navbar />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen pt-20">
         <div className="max-w-4xl w-full bg-gray-400 rounded-lg shadow-lg py-8 px-6 mt-10 mx-4">
           <h1 className="text-3xl text-center mb-6 font-bold text-gray-800">
@@ -211,21 +208,26 @@ const ItineraryPlan = () => {
               Day {day} Itinerary
             </h2>
 
-            {/* Destination */}
+            {/* Destination Dropdown */}
             <div className="mt-4">
               <label className="block text-gray-700">Destination</label>
-              <input
-                type="text"
+              <select
                 className="border px-4 py-2 rounded-lg w-full mb-3 shadow"
-                placeholder="Enter destination"
                 value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-              />
+                onChange={handleDestinationChange}
+              >
+                <option value="">Select a destination</option>
+                {Object.keys(destinationActivities).map((dest) => (
+                  <option key={dest} value={dest}>
+                    {dest}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Times of Day */}
             <div className="mt-4">
-              <label className="block text-gray-700">Time of Day</label>
+              <label className="block text -gray-700">Time of Day</label>
               <select
                 className="border px-4 py-2 rounded-lg w-full mb-3 shadow"
                 value={timeOfDay}
@@ -270,16 +272,15 @@ const ItineraryPlan = () => {
               />
             </div>
 
-            {/* Activity */}
+            {/* Activity Dropdown */}
             <div className="mt-4">
               <label className="block text-gray-700">Activity</label>
               <select
                 className="border px-4 py-2 rounded-lg w-full mb-3 shadow"
-                value={selectedActivity}
-                onChange={(e) => setSelectedActivity(e.target.value)}
+                onChange={(e) => setNewActivity(e.target.value)}
               >
                 <option value="">Select an activity</option>
-                {predefinedActivities.map((activity, index) => (
+                {destinationActivities[destination]?.map((activity, index) => (
                   <option key={index} value={activity}>
                     {activity}
                   </option>
@@ -295,12 +296,11 @@ const ItineraryPlan = () => {
               <button
                 className="bg-sky-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-sky-600"
                 onClick={() => {
-                  // Add the selected activity or the custom activity to the activities list
-                  if (selectedActivity) {
-                    setActivities([...activities, selectedActivity]);
-                    setSelectedActivity(""); // Reset selected activity
-                  } else if (newActivity.trim() !== "") {
-                    setActivities([...activities, newActivity]);
+                  if (newActivity.trim() !== "") {
+                    setActivities((prevActivities) => [
+                      ...prevActivities,
+                      newActivity,
+                    ]);
                     setNewActivity(""); // Reset new activity input
                   }
                 }}

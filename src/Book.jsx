@@ -507,15 +507,15 @@ const Book = () => {
     console.log("Payment submitted for booking:", selectedFlight);
   };
 
-  const ticketDetails = selectedFlight
+  const ticketDetails = selectedTransport
     ? {
-        flightNumber: selectedFlight.id,
-        from: selectedFlight.from,
-        to: selectedFlight.to,
-        departureDate: selectedFlight.departDate,
-        returnDate: selectedFlight.returnDate,
-        airline: selectedFlight.airline,
-        price: selectedFlight.price,
+        transportNumber: selectedTransport.id,
+        from: selectedTransport.from,
+        to: selectedTransport.to,
+        departureDate: selectedTransport.departDate,
+        returnDate: selectedTransport.returnDate,
+        airline: selectedTransport.airline || "N/A", // For buses and boats, this may not be applicable
+        price: selectedTransport.price,
         numPassengers: numPassengers,
         totalPrice: totalPrice.toFixed(2),
         passengerName: `${firstName} ${lastName}`,
@@ -685,6 +685,7 @@ const Book = () => {
                         onChange={(e) => setFrom(e.target.value)}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus :ring-1 focus:ring-sky-500 sm:text-sm"
                       >
+                        <option value="">Select</option>
                         <option value="Manila">Manila</option>
                         <option value="Cebu">Cebu</option>
                         <option value="Davao">Davao</option>
@@ -709,6 +710,7 @@ const Book = () => {
                         onChange={(e) => setTo(e.target.value)}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                       >
+                        <option value="">Select</option>
                         <option value="Manila">Manila</option>
                         <option value="Cebu">Cebu</option>
                         <option value="Davao">Davao</option>
@@ -1119,7 +1121,7 @@ const Book = () => {
                     </p>
                   </div>
                   <QRCode
-                    value={JSON.stringify(ticketDetails)}
+                    value={JSON.stringify(ticketDetails)} // Ensure this is populated correctly
                     size={259}
                     level={"H"}
                     includeMargin={true}
