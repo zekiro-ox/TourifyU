@@ -685,7 +685,6 @@ const Book = () => {
                         onChange={(e) => setFrom(e.target.value)}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus :ring-1 focus:ring-sky-500 sm:text-sm"
                       >
-                        <option value="">Select</option>
                         <option value="Manila">Manila</option>
                         <option value="Cebu">Cebu</option>
                         <option value="Davao">Davao</option>
@@ -710,7 +709,6 @@ const Book = () => {
                         onChange={(e) => setTo(e.target.value)}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                       >
-                        <option value="">Select</option>
                         <option value="Manila">Manila</option>
                         <option value="Cebu">Cebu</option>
                         <option value="Davao">Davao</option>
@@ -996,7 +994,6 @@ const Book = () => {
                       onChange={(e) => setSeatPreference(e.target.value)}
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                     >
-                      <option value="">Select</option>
                       {transportType === "flights" && (
                         <>
                           <option value="Window">Window</option>
