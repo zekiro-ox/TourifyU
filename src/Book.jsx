@@ -6,331 +6,62 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeStyling from "qr-code-styling";
 
-const flightsData = [
-  {
-    id: 1001,
-    from: "Manila",
-    to: "Cebu",
-    departDate: "2024-12-07",
-    airline: "Cebu Pacific",
-    price: "₱1000",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1002,
-    from: "Manila",
-    to: "Bohol",
-    departDate: "2024-12-02",
-    airline: "Philippine Airlines",
-    price: "₱1500",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1003,
-    from: "Cebu",
-    to: "Boracay",
-    departDate: "2024-12-03",
-    airline: "Air Asia",
-    price: "₱1200",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1004,
-    from: "Manila",
-    to: "Davao",
-    departDate: "2024-12-05",
-    airline: "Air Asia",
-    price: "₱1300",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1005,
-    from: "Davao",
-    to: "Cebu",
-    departDate: "2024-12-06",
-    airline: "Cebu Pacific",
-    price: "₱1100",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1006,
-    from: "Cebu",
-    to: "Manila",
-    departDate: "2024-12-07",
-    airline: "Philippine Airlines",
-    price: "₱1400",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1015,
-    from: "Manila",
-    to: "Boracay",
-    departDate: "2024-12-08",
-    airline: "Cebu Pacific",
-    price: "₱1150",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1016,
-    from: "Palawan",
-    to: "Cebu",
-    departDate: "2024-12-12",
-    airline: "Air Asia",
-    price: "₱1450",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1017,
-    from: "Davao",
-    to: "Boracay",
-    departDate: "2024-12-15",
-    airline: "Philippine Airlines",
-    price: "₱1550",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1018,
-    from: "Bohol",
-    to: "Manila",
-    departDate: "2024-12-20",
-    airline: "Cebu Pacific",
-    price: "₱1300",
-    tripType: "one-way",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  // Round-trip flights
-  {
-    id: 1007,
-    from: "Manila",
-    to: "Bohol",
-    departDate: "2024-12-02",
-    returnDate: "2024-12-09",
-    airline: "Air Asia",
-    price: "₱3000",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1008,
-    from: "Cebu",
-    to: "Davao",
-    departDate: "2024-12-03",
-    returnDate: "2024-12-10",
-    airline: "Philippine Airlines",
-    price: "₱2500",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1012,
-    from: "Manila",
-    to: "Palawan",
-    departDate: "2024-12-08",
-    returnDate: "2024-12-15",
-    airline: "Cebu Pacific",
-    price: "₱3200",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1013,
-    from: "Davao",
-    to: "Manila",
-    departDate: "2024-12-10",
-    returnDate: "2024-12-17",
-    airline: "Air Asia",
-    price: "₱2700",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1014,
-    from: "Cebu",
-    to: "Bohol",
-    departDate: "2024-12-20",
-    returnDate: "2024-12-27",
-    airline: "Philippine Airlines",
-    price: "₱2900",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1019,
-    from: "Manila",
-    to: "Boracay",
-    departDate: "2024-12-05",
-    returnDate: "2024-12-12",
-    airline: "Cebu Pacific",
-    price: "₱3100",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1020,
-    from: "Bohol",
-    to: "Palawan",
-    departDate: "2024-12-06",
-    returnDate: "2024-12-13",
-    airline: "Philippine Airlines",
-    price: "₱3400",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1021,
-    from: "Davao",
-    to: "Boracay",
-    departDate: "2024-12-10",
-    returnDate: "2024-12-17",
-    airline: "Air Asia",
-    price: "₱3200",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1022,
-    from: "Cebu",
-    to: "Manila",
-    departDate: "2024-12-18",
-    returnDate: "2024-12-24",
-    airline: "Cebu Pacific",
-    price: "₱3000",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-  {
-    id: 1023,
-    from: "Manila",
-    to: "Cebu",
-    departDate: "2024-12-20",
-    returnDate: "2024-12-27",
-    airline: "Philippine Airlines",
-    price: "₱3300",
-    tripType: "round-trip",
-    seats: {
-      Window: 10,
-      Aisle: 10,
-      Middle: 10,
-    },
-  },
-];
+const generateRandomDate = (start, end) => {
+  const date = new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+  return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+};
 
-const busData = [
-  {
-    id: 2001,
-    from: "Manila",
-    to: "Cebu",
-    departDate: "2024-12-10",
-    price: "₱500",
-    seats: {
-      Window: 20,
-      Aisle: 20,
-      Middle: 20,
-    },
-  },
-  // Add more bus data as needed
-];
+const generateRandomTransportData = (type, count) => {
+  const locations = ["Manila", "Cebu", "Davao", "Bohol", "Boracay", "Palawan"];
+  const airlines = ["Cebu Pacific", "Philippine Airlines", "Air Asia"];
+  const prices = { flights: 1000, buses: 500, boats: 700 };
 
-const boatData = [
-  {
-    id: 3001,
-    from: "Cebu",
-    to: "Bohol",
-    departDate: "2024-12-10",
-    price: "₱700",
-    seats: {
-      Window: 15,
-      Aisle: 15,
-      Middle: 15,
-    },
-  },
-  // Add more boat data as needed
-];
+  const data = [];
+  for (let i = 0; i < count; i++) {
+    const from = locations[Math.floor(Math.random() * locations.length)];
+    let to;
+    do {
+      to = locations[Math.floor(Math.random() * locations.length)];
+    } while (to === from);
+
+    // Restrict departDate to January to March 2025
+    const departDate = generateRandomDate(
+      new Date(2025, 0, 12), // Start: January 1, 2025
+      new Date(2025, 0, 20) // End: March 31, 2025
+    );
+
+    const returnDate =
+      Math.random() > 0.5
+        ? generateRandomDate(new Date(departDate), new Date(2025, 2, 31))
+        : undefined;
+
+    data.push({
+      id: `${type.charAt(0).toUpperCase()}${i}`,
+      from,
+      to,
+      departDate,
+      returnDate,
+      airline:
+        type === "flights"
+          ? airlines[Math.floor(Math.random() * airlines.length)]
+          : undefined,
+      price: `₱${Math.floor(Math.random() * 2000 + prices[type])}`,
+      tripType: returnDate ? "round-trip" : "one-way",
+      seats: {
+        Window: Math.floor(Math.random() * 30),
+        Aisle: Math.floor(Math.random() * 30),
+        Middle: type === "flights" ? Math.floor(Math.random() * 30) : undefined,
+      },
+    });
+  }
+  return data;
+};
+
+const flightsData = generateRandomTransportData("flights", 20);
+const busData = generateRandomTransportData("buses", 10);
+const boatData = generateRandomTransportData("boats", 10);
 
 const Book = () => {
   const [promoCode, setPromoCode] = useState("");
@@ -418,8 +149,9 @@ const Book = () => {
   const handleSearch = (e) => {
     e.preventDefault();
 
+    let results = [];
     if (transportType === "flights") {
-      let results = flightsData.filter(
+      results = flightsData.filter(
         (flight) =>
           flight.from === from &&
           flight.to === to &&
@@ -433,19 +165,24 @@ const Book = () => {
 
       setFilteredFlights(results);
     } else if (transportType === "buses") {
-      let results = busData.filter(
+      results = busData.filter(
         (bus) =>
           bus.from === from && bus.to === to && bus.departDate === departDate
       );
 
       setFilteredBuses(results);
     } else if (transportType === "boats") {
-      let results = boatData.filter(
+      results = boatData.filter(
         (boat) =>
           boat.from === from && boat.to === to && boat.departDate === departDate
       );
 
       setFilteredBoats(results);
+    }
+
+    // Alert if no results are found
+    if (results.length === 0) {
+      alert(`No ${transportType} available for the selected criteria.`);
     }
   };
 
