@@ -69,8 +69,6 @@ const Book = () => {
   const [enteredPromo, setEnteredPromo] = useState("");
   const [currentDiscount, setCurrentDiscount] = useState(0);
   const [tripType, setTripType] = useState("one-way");
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
   const [departDate, setDepartDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [filteredFlights, setFilteredFlights] = useState([]);
@@ -89,6 +87,17 @@ const Book = () => {
   const [filteredBuses, setFilteredBuses] = useState([]);
   const [filteredBoats, setFilteredBoats] = useState([]);
   const [selectedTransport, setSelectedTransport] = useState(null);
+  const allLocations = ["Manila", "Cebu", "Davao", "Bohol", "Boracay"];
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [showSelectFrom, setShowSelectFrom] = useState(true); // Control visibility of "Select" in "From"
+  const [showSelectTo, setShowSelectTo] = useState(true); // Control visibility of "Select" in "To"
+
+  // Filter "To" options to exclude the selected "From" location
+  const filteredLocations = allLocations.filter(
+    (location) => location !== from
+  );
+
   // This runs once when the component mounts
 
   const generateRandomDiscount = () => {
@@ -419,20 +428,23 @@ const Book = () => {
                         id="from"
                         name="from"
                         value={from}
-                        onChange={(e) => setFrom(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus :ring-1 focus:ring-sky-500 sm:text-sm"
+                        onChange={(e) => {
+                          setFrom(e.target.value);
+                          setShowSelectFrom(false); // Hide "Select" after choosing an option
+                        }}
+                        onFocus={() => setShowSelectFrom(false)} // Hide "Select" when dropdown is focused
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                       >
-                        <option value="">Select</option>
-                        <option value="Manila">Manila</option>
-                        <option value="Cebu">Cebu</option>
-                        <option value="Davao">Davao</option>
-                        <option value="Bohol">Bohol</option>
-                        <option value="Boracay">Boracay</option>
-                        {/* Add more options as needed */}
+                        {showSelectFrom && <option value="">Select</option>}
+                        {allLocations.map((location) => (
+                          <option key={location} value={location}>
+                            {location}
+                          </option>
+                        ))}
                       </select>
                     </div>
 
-                    {/* To */}
+                    {/* To Dropdown */}
                     <div>
                       <label
                         htmlFor="to"
@@ -444,16 +456,19 @@ const Book = () => {
                         id="to"
                         name="to"
                         value={to}
-                        onChange={(e) => setTo(e.target.value)}
+                        onChange={(e) => {
+                          setTo(e.target.value);
+                          setShowSelectTo(false); // Hide "Select" after choosing an option
+                        }}
+                        onFocus={() => setShowSelectTo(false)} // Hide "Select" when dropdown is focused
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                       >
-                        <option value="">Select</option>
-                        <option value="Manila">Manila</option>
-                        <option value="Cebu">Cebu</option>
-                        <option value="Davao">Davao</option>
-                        <option value="Bohol">Bohol</option>
-                        <option value="Boracay">Boracay</option>
-                        {/* Add more options as needed */}
+                        {showSelectTo && <option value="">Select</option>}
+                        {filteredLocations.map((location) => (
+                          <option key={location} value={location}>
+                            {location}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>

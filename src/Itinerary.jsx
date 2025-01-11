@@ -22,6 +22,7 @@ const ItineraryPlan = () => {
   const [departureTime, setDepartureTime] = useState(""); // New state for departure time
   const [editMode, setEditMode] = useState(false); // State to track if we are editing
   const [currentItineraryId, setCurrentItineraryId] = useState(null);
+  const [showSelectOption, setShowSelectOption] = useState(true);
 
   // Mapping of destinations to activities
   const destinationActivities = {
@@ -214,9 +215,16 @@ const ItineraryPlan = () => {
               <select
                 className="border px-4 py-2 rounded-lg w-full mb-3 shadow"
                 value={destination}
-                onChange={handleDestinationChange}
+                onChange={(e) => {
+                  handleDestinationChange(e); // Handle the change event
+                  setShowSelectOption(false); // Hide the "Select a destination" option
+                }}
+                onFocus={() => setShowSelectOption(false)} // Hide the "Select a destination" option on focus
               >
-                <option value="">Select a destination</option>
+                {/* Conditionally render "Select a destination" */}
+                {showSelectOption && (
+                  <option value="">Select a destination</option>
+                )}
                 {Object.keys(destinationActivities).map((dest) => (
                   <option key={dest} value={dest}>
                     {dest}
