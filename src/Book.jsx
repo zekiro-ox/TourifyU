@@ -5,6 +5,7 @@ import Logo from "./assets/mainlogo.png";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeStyling from "qr-code-styling";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const generateRandomDate = (start, end) => {
   const date = new Date(
@@ -14,7 +15,7 @@ const generateRandomDate = (start, end) => {
 };
 
 const generateRandomTransportData = (type, count) => {
-  const locations = ["Manila", "Cebu", "Davao", "Bohol", "Boracay", "Palawan"];
+  const locations = ["Manila", "Cebu"];
   const airlines = ["Cebu Pacific", "Philippine Airlines", "Air Asia"];
   const prices = { flights: 1000, buses: 500, boats: 700 };
 
@@ -28,8 +29,8 @@ const generateRandomTransportData = (type, count) => {
 
     // Restrict departDate to January to March 2025
     const departDate = generateRandomDate(
-      new Date(2025, 0, 12), // Start: January 1, 2025
-      new Date(2025, 0, 20) // End: March 31, 2025
+      new Date(2025, 0, 18), // Start: January 1, 2025
+      new Date(2025, 0, 19) // End: March 31, 2025
     );
 
     const returnDate =
@@ -91,7 +92,8 @@ const Book = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [showSelectFrom, setShowSelectFrom] = useState(true); // Control visibility of "Select" in "From"
-  const [showSelectTo, setShowSelectTo] = useState(true); // Control visibility of "Select" in "To"
+  const [showSelectTo, setShowSelectTo] = useState(true);
+  // Control visibility of "Select" in "To"
 
   // Filter "To" options to exclude the selected "From" location
   const filteredLocations = allLocations.filter(
@@ -657,6 +659,12 @@ const Book = () => {
               </>
             ) : showBookingForm ? (
               <>
+                <button
+                  onClick={() => setSelectedTransport(false)}
+                  className="mb-4 bg-gray-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-600"
+                >
+                  Back
+                </button>
                 <h2 className="text-xl font-bold text-gray-800 mb-6">
                   Booking Form
                 </h2>
